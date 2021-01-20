@@ -1,22 +1,7 @@
 class  Flower {
   constructor(x, y, z, r, g, b, v, sA, pA) {
-    this.petals = {
-      x1: 0,
-      y1: 15,
-      x2: 0,
-      y2: 0,
-      x3: 5,
-      y3: 10,
-      total: 8,
-    };
-    this.stem = {
-      x1: 0,
-      y1: 0,
-      x2: 0,
-      y2: 60,
-    };
     this.arguments = {
-      position: createVector(x, y, z),
+      position1: createVector(x, y, z),
       velocity: createVector(0, 0, v),
       red: r,
       green: g,
@@ -24,9 +9,25 @@ class  Flower {
       stemAngle: sA,
       petalAngle: pA,
     };
+    this.position2 = p5.Vector.mult(this.arguments.position1, 1.1);
     this.acceleration = createVector(0, 0, 0.1);
     this.active = true;
     this.movement = false;
+    this.petals = {
+      x1: this.position2.x,
+      y1: this.position2.y + 15,
+      x2: this.position2.x,
+      y2: this.position2.y,
+      x3: this.position2.x + 5,
+      y3: this.position2.y + 10,
+      total: 8,
+    };
+    this.stem = {
+      x1: this.position2.x,
+      y1: this.position2.y,
+      x2: this.arguments.position1.x,
+      y2: this.arguments.position1.y + 60,
+    };
   }
 
   drawStem() {
@@ -44,7 +45,7 @@ class  Flower {
   drawFlower() {
     if (this.active) {
       push();
-      translate(this.arguments.position.x, this.arguments.position.y, this.arguments.position.z);
+      translate(0, 0, this.arguments.position1.z);
       rotateZ(this.arguments.stemAngle);
       strokeWeight(0.33);
       stroke(this.arguments.red, this.arguments.green, this.arguments.blue);
@@ -59,8 +60,8 @@ class  Flower {
   levitate() {
     if (this.movement) {
       this.arguments.velocity.add(this.acceleration);
-      this.arguments.position.add(this.arguments.velocity);
-      if (this.arguments.position.z > height) {
+      this.arguments.position1.add(this.arguments.velocity);
+      if (this.arguments.position1.z > height) {
         this.active = false;
       }
     }

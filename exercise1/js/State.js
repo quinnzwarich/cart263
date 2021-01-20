@@ -15,20 +15,13 @@ class State {
   }
 
   display() {
-
-    for (let i = 0; i < flowers.length; i++) {
-      let flower = flowers[i];
-      flower.drawFlower();
-      flower.levitate();
-      if (!flower.active) {
-        flowers.splice(i, 1);
-      }
+    for (let i = 0; i < flowrs.length; i++) {
+      let flower = flowrs[i];
+      flower.display();
     }
   }
 
   keyPressed() {
-    let flower = random(flowers);
-    flower.movement = true;
-    console.log(flowers.length);
+
   }
 }

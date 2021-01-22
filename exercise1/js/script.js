@@ -19,12 +19,14 @@ let note4;
 let note5;
 let currentState;
 
-let flowers = [];
 let flowrs = [];
 let globe = [];
+let shading = [];
 
 const TOTAL = 12;
-const RADIUS = 200;
+let radius = 200;
+let randomIndexI = 0;
+let randomIndexJ = 0;
 
 function preload() {
   font = loadFont("assets/fonts/england.ttf");
@@ -39,19 +41,39 @@ function setup() {
   createCanvas(600, 600, WEBGL);
   currentState = new Title;
 
+  randomIndexI = floor(random(0, TOTAL));
+  randomIndexJ = floor(random(0, TOTAL));
+
   // code grifted from spherical geometry coding challenge
-  for (let i = 0; i < TOTAL; i++) {
-    let latitude = map(i, 0, TOTAL, 0, PI);
-    for (let j = 0; j < TOTAL; j++) {
+  for (let i = 0; i < TOTAL + 1; i++) {
+    let latitude = map(i, 0, TOTAL + 1, 0, PI);
+    globe[i] = [];
+    shading[i] = [];
+    for (let j = 0; j < TOTAL + 1; j++) {
       let longitude = map(j, 0, TOTAL, 0, 2 * PI);
+      let x = radius * sin(latitude) * cos(longitude);
+      let y = radius * sin(latitude) * sin(longitude);
+      let z = radius * cos(latitude);
       let r = map(noise(latitude), 0, 1, 127, 255);
       let g = map(noise(longitude), 0, 1, 127, 255);
       let b = map(noise(latitude, longitude), 0, 1, 127, 255);
-      let x = RADIUS * sin(latitude) * cos(longitude);
-      let y = RADIUS * sin(latitude) * sin(longitude);
-      let z = RADIUS * cos(latitude);
-      let flower = new Flowr(x, y, z, r, g, b, latitude, longitude);
-      flowrs.push(flower);
+      let a = map(noise(longitude), 0, 1, -PI, PI);
+      if (randomIndexI === i && randomIndexJ === j) {
+        let r1 = 255;
+        let g1 = 255;
+        let b1 = 204;
+        let r2 = r1 - 32;
+        let g2 = g1 - 32;
+        let b2 = b1 - 32;
+        let star = new FreakieFlowr(x, y, z, r1, g1, b1, latitude, longitude, r2, g2, b2);
+        flowrs.push(star);
+      }
+      else {
+        let flower = new Flowr(x, y, z, r, g, b, a, latitude, longitude);
+        flowrs.push(flower);
+      }
+      globe[i][j] = createVector(x, y, z);
+      shading[i][j] = ((r + g + b) / 3) - 32;
     }
   }
 }

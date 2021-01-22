@@ -18,8 +18,11 @@ class Title extends State {
     // pop();
   }
 
+  keyReleased() {
+    super.keyReleased();
+  }
+
   keyPressed() {
     super.keyPressed();
-
   }
 }

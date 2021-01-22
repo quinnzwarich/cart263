@@ -47,6 +47,7 @@ function setup() {
   // code grifted from spherical geometry coding challenge
   for (let i = 0; i < TOTAL + 1; i++) {
     let latitude = map(i, 0, TOTAL + 1, 0, PI);
+    flowrs[i] = [];
     globe[i] = [];
     shading[i] = [];
     for (let j = 0; j < TOTAL + 1; j++) {
@@ -65,12 +66,10 @@ function setup() {
         let r2 = r1 - 32;
         let g2 = g1 - 32;
         let b2 = b1 - 32;
-        let star = new FreakieFlowr(x, y, z, r1, g1, b1, latitude, longitude, r2, g2, b2);
-        flowrs.push(star);
+        flowrs[i][j] = new FreakieFlowr(x, y, z, r1, g1, b1, latitude, longitude, r2, g2, b2);
       }
       else {
-        let flower = new Flowr(x, y, z, r, g, b, a, latitude, longitude);
-        flowrs.push(flower);
+        flowrs[i][j] = new Flowr(x, y, z, r, g, b, a, latitude, longitude);
       }
       globe[i][j] = createVector(x, y, z);
       shading[i][j] = ((r + g + b) / 3) - 32;
@@ -81,6 +80,10 @@ function setup() {
 function draw() {
   orbitControl();
   currentState.draw();
+}
+
+function keyReleased() {
+  currentState.keyReleased();
 }
 
 function keyPressed() {

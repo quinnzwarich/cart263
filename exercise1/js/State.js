@@ -1,6 +1,8 @@
 class State {
   constructor() {
-
+    this.selectedI = 0;
+    this.selectedJ = 0;
+    this.space = false;
   }
 
   draw() {
@@ -31,10 +33,22 @@ class State {
   }
 
   flowrs() {
-    for (let i = 0; i < flowrs.length; i++) {
-      let flower = flowrs[i];
-      flower.display();
-      flower.states();
+    for (let i = 0; i < TOTAL + 1; i++) {
+      for (let j = 0; j < TOTAL + 1; j++) {
+        let flower = flowrs[i][j];
+        flower.display();
+        flower.states();
+        if (i === this.selectedI &&
+            j === this.selectedJ) {
+          flower.state = `bobbing`;
+          if (this.space) {
+            flower.state = `selected`;
+          }
+        }
+        else {
+          flower.state = `still`;
+        }
+      }
     }
   }
 
@@ -43,7 +57,51 @@ class State {
     this.flowrs();
   }
 
-  keyPressed() {
+  bounds() {
+    if (this.selectedI > TOTAL) {
+      this.selectedI = 0;
+    }
+    else if (this.selectedI < 0) {
+      this.selectedI = TOTAL;
+    }
+    if (this.selectedJ > TOTAL) {
+      this.selectedJ = 0;
+    }
+    else if (this.selectedJ < 0) {
+      this.selectedJ = TOTAL;
+    }
+  }
 
+  keyReleased() {
+    this.bounds();
+
+    if (keyCode === LEFT_ARROW) {
+      this.selectedI--;
+    }
+    else if (keyCode === RIGHT_ARROW) {
+      this.selectedI++;
+    }
+    else {
+      this.selectedI = this.selectedI;
+    }
+
+    if (keyCode === UP_ARROW) {
+      this.selectedJ++;
+    }
+    else if (keyCode === DOWN_ARROW) {
+      this.selectedJ--;
+    }
+    else {
+      this.selectedJ = this.selectedJ;
+    }
+  }
+
+  keyPressed() {
+    if (keyCode === 32) {
+      this.space = true;
+    }
+    else {
+      this.space = false;
+    }
   }
 }

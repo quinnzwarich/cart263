@@ -4,10 +4,6 @@ class User {
 
   }
 
-  icon() {
-
-  }
-
   selection() {
     if (keyisDown(LEFT_ARROW)) {
       

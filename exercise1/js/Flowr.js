@@ -11,6 +11,7 @@ class Flowr {
     this.totalPetals = 8;
     this.mod = 0;
     this.move = 0;
+    this.v3 = p5.Vector.fromAngles(this.latitude, this.longitude);
     this.state = `still`
   }
 

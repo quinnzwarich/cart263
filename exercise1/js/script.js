@@ -12,34 +12,36 @@ from a minor pentatonic scale.
 **************************************************/
 
 let font;
-let note1;
-let note2;
-let note3;
-let note4;
-let note5;
+let stanza1;
+let stanza2;
+let stanza3;
+let stanza4;
 let currentState;
 
 let flowrs = [];
 let globe = [];
 let shading = [];
 
-const TOTAL = 12;
+
+
+const TOTAL = 9;
+let spacebar = false;
 let radius = 200;
 let randomIndexI = 0;
 let randomIndexJ = 0;
 
 function preload() {
-  font = loadFont("assets/fonts/england.ttf");
-  note1 = loadSound(`assets/sounds/Fsharp3.wav`);
-  note2 = loadSound(`assets/sounds/A3.wav`);
-  note3 = loadSound(`assets/sounds/B3.wav`);
-  note4 = loadSound(`assets/sounds/Csharp4.wav`);
-  note5 = loadSound(`assets/sounds/E4.wav`);
+  font = loadFont("assets/fonts/grotesk.otf");
 }
 
 function setup() {
   createCanvas(600, 600, WEBGL);
   currentState = new Title;
+
+  stanza1 = createGraphics(200, 200, WEBGL);
+  stanza2 = createGraphics(200, 200, WEBGL);
+  stanza3 = createGraphics(200, 200, WEBGL);
+  stanza4 = createGraphics(200, 200, WEBGL);
 
   randomIndexI = floor(random(0, TOTAL));
   randomIndexJ = floor(random(0, TOTAL));

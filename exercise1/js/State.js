@@ -2,7 +2,7 @@ class State {
   constructor() {
     this.selectedI = 0;
     this.selectedJ = 0;
-    this.space = false;
+
   }
 
   draw() {
@@ -41,7 +41,7 @@ class State {
         if (i === this.selectedI &&
             j === this.selectedJ) {
           flower.state = `bobbing`;
-          if (this.space) {
+          if (spacebar) {
             flower.state = `selected`;
           }
         }
@@ -98,10 +98,10 @@ class State {
 
   keyPressed() {
     if (keyCode === 32) {
-      this.space = true;
+      spacebar = true;
     }
     else {
-      this.space = false;
+      spacebar = false;
     }
   }
 }

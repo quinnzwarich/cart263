@@ -12,6 +12,11 @@ class Flowr {
     this.mod = 0;
     this.move = 0;
     this.v3 = p5.Vector.fromAngles(this.latitude, this.longitude);
+    this.original = {
+      x: x,
+      y: y,
+      z: z
+    };
     this.state = `still`
   }
 
@@ -48,6 +53,9 @@ class Flowr {
     if (this.state === `still`) {
       this.mod = 0;
       this.move = 1;
+      this.v1.set(this.original.x,
+      this.original.y, this.original.z);
+      this.v2 = p5.Vector.mult(this.v1, 1.2);
       this.v1 = p5.Vector.mult(this.v1, this.move);
       this.v2 = p5.Vector.mult(this.v1, this.move + 0.2);
     }
@@ -57,6 +65,9 @@ class Flowr {
     if (this.state === `bobbing`) {
       this.mod += 0.25;
       this.move = map(cos(this.mod), -1, 1, 0.99, 1.01);
+      this.v1.set(this.original.x,
+      this.original.y, this.original.z);
+      this.v2 = p5.Vector.mult(this.v1, 1.2);
       this.v1 = p5.Vector.mult(this.v1, this.move);
       this.v2 = p5.Vector.mult(this.v2, this.move);
     }
@@ -64,12 +75,14 @@ class Flowr {
 
   select() {
     if (this.state === `selected`) {
-      this.mod += 2.5;
+      this.mod += 5;
       this.move = map(cos(this.mod), -1, 1, 0.99, 1.01);
       this.v1 = p5.Vector.mult(this.v1, this.move);
       this.v2 = p5.Vector.mult(this.v2, this.move);
-      if (this.mod > 15) {
+      if (this.mod > 60) {
+        this.mod = 0;
         this.state = `bobbing`;
+        spacebar = false;
       }
     }
   }

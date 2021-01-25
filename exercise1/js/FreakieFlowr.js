@@ -9,6 +9,7 @@ class FreakieFlowr extends Flowr {
     this.numPoints = 5;
     this.angle = (2 * PI) / this.numPoints;
     this.halfAngle = this.angle / 2;
+    this.id = true;
   }
 
   petals() {

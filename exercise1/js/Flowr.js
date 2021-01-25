@@ -18,6 +18,7 @@ class Flowr {
       z: z
     };
     this.state = `still`
+    this.id = false;
   }
 
   stem() {
@@ -64,7 +65,7 @@ class Flowr {
   bob() {
     if (this.state === `bobbing`) {
       this.mod += 0.25;
-      this.move = map(cos(this.mod), -1, 1, 0.99, 1.01);
+      this.move = map(cos(this.mod), -1, 1, 0.99, 1.02);
       this.v1.set(this.original.x,
       this.original.y, this.original.z);
       this.v2 = p5.Vector.mult(this.v1, 1.2);
@@ -76,7 +77,7 @@ class Flowr {
   select() {
     if (this.state === `selected`) {
       this.mod += 5;
-      this.move = map(cos(this.mod), -1, 1, 0.99, 1.01);
+      this.move = map(cos(this.mod), -1, 1, 0.99, 1.02);
       this.v1 = p5.Vector.mult(this.v1, this.move);
       this.v2 = p5.Vector.mult(this.v2, this.move);
       if (this.mod > 60) {
@@ -87,10 +88,23 @@ class Flowr {
     }
   }
 
+  depart() {
+    if (this.state === `departing`) {
+      this.mod += 0.01;
+      this.move = 1 + this.mod;
+      this.v1.set(this.original.x,
+      this.original.y, this.original.z);
+      this.v2 = p5.Vector.mult(this.v1, 1.2);
+      this.v1 = p5.Vector.mult(this.v1, this.move);
+      this.v2 = p5.Vector.mult(this.v2, this.move);
+    }
+  }
+
   states() {
     this.still();
     this.bob();
     this.select();
+    this.depart();
   }
 
   display() {

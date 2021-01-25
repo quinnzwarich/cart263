@@ -12,17 +12,24 @@ from a minor pentatonic scale.
 **************************************************/
 
 let font;
+let theme;
+let impulse;
+let bobfx;
+let selectfx;
+let correctfx;
+let currentState;
 let stanza1;
 let stanza2;
 let stanza3;
 let stanza4;
-let currentState;
+let stanza5;
+let stanza6;
+let stanza7;
+let stanza8;
 
 let flowrs = [];
 let globe = [];
 let shading = [];
-
-
 
 const TOTAL = 9;
 let spacebar = false;
@@ -32,16 +39,32 @@ let randomIndexJ = 0;
 
 function preload() {
   font = loadFont("assets/fonts/grotesk.otf");
+  theme = loadSound(`assets/sounds/lonelyplanettheme.mp3`);
+  impulse = createConvolver(`assets/sounds/impulse.mp3`);
+  bobfx = loadSound(`assets/sounds/bobsound.mp3`);
+  selectfx = loadSound(`assets/sounds/selectsound.mp3`);
+  correctfx = loadSound(`assets/sounds/correctsound.mp3`);
 }
 
 function setup() {
   createCanvas(600, 600, WEBGL);
+  userStartAudio();
   currentState = new Title;
+
+  theme.disconnect();
+  impulse.process(theme);
+  bobfx.playMode(`untilDone`);
+  selectfx.playMode(`untilDone`);
+  correctfx.playMode(`untilDone`);
 
   stanza1 = createGraphics(200, 200, WEBGL);
   stanza2 = createGraphics(200, 200, WEBGL);
   stanza3 = createGraphics(200, 200, WEBGL);
   stanza4 = createGraphics(200, 200, WEBGL);
+  stanza5 = createGraphics(200, 200, WEBGL);
+  stanza6 = createGraphics(200, 200, WEBGL);
+  stanza7 = createGraphics(200, 200, WEBGL);
+  stanza8 = createGraphics(200, 200, WEBGL);
 
   randomIndexI = floor(random(0, TOTAL));
   randomIndexJ = floor(random(0, TOTAL));
@@ -82,6 +105,10 @@ function setup() {
 function draw() {
   orbitControl();
   currentState.draw();
+}
+
+function mousePressed() {
+  currentState.mousePressed();
 }
 
 function keyReleased() {

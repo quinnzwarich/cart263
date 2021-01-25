@@ -2,7 +2,8 @@ class State {
   constructor() {
     this.selectedI = 0;
     this.selectedJ = 0;
-
+    this.outerRing = 0;
+    this.innerRing = 0;
   }
 
   draw() {
@@ -33,23 +34,7 @@ class State {
   }
 
   flowrs() {
-    for (let i = 0; i < TOTAL + 1; i++) {
-      for (let j = 0; j < TOTAL + 1; j++) {
-        let flower = flowrs[i][j];
-        flower.display();
-        flower.states();
-        if (i === this.selectedI &&
-            j === this.selectedJ) {
-          flower.state = `bobbing`;
-          if (spacebar) {
-            flower.state = `selected`;
-          }
-        }
-        else {
-          flower.state = `still`;
-        }
-      }
-    }
+
   }
 
   display() {
@@ -70,6 +55,12 @@ class State {
     else if (this.selectedJ < 0) {
       this.selectedJ = TOTAL;
     }
+  }
+
+  mousePressed() {
+    if (!theme.isPlaying()) {
+       theme.loop();
+     }
   }
 
   keyReleased() {

@@ -1,22 +1,23 @@
 "use strict";
 
 /**************************************************
-Field of Artificial Flowers
+Lonely Planet
 Quinn Zwarich
 
-This simulation generates a field of flowers using perlin noise.
-The idea behind the interaction is that it becomes an unending game of
-"loves me... loves me not..." that the user plays through uprooting flowers
-(as opposed to delicately plucking pedals). In doing so, they also generate notes
-from a minor pentatonic scale.
+This was aesthetically inspired by the game Lovely Planet
+though in any other regard it is not very similar. It strays
+a little far from sausage dog but makes use of most of the ideas
+from the activity such as using polymorphism to create a special
+object that the user must find.
 **************************************************/
 
-let font;
+let grotesk;
 let theme;
 let impulse;
 let bobfx;
 let selectfx;
 let correctfx;
+let cam;
 let currentState;
 let stanza1;
 let stanza2;
@@ -38,7 +39,7 @@ let randomIndexI = 0;
 let randomIndexJ = 0;
 
 function preload() {
-  font = loadFont("assets/fonts/grotesk.otf");
+  grotesk = loadFont("assets/fonts/grotesk.otf");
   theme = loadSound(`assets/sounds/lonelyplanettheme.mp3`);
   impulse = createConvolver(`assets/sounds/impulse.mp3`);
   bobfx = loadSound(`assets/sounds/bobsound.mp3`);
@@ -49,14 +50,16 @@ function preload() {
 function setup() {
   createCanvas(600, 600, WEBGL);
   userStartAudio();
-  currentState = new Title;
+  currentState = new Title();
 
+  // audio settings
   theme.disconnect();
   impulse.process(theme);
   bobfx.playMode(`untilDone`);
   selectfx.playMode(`untilDone`);
   correctfx.playMode(`untilDone`);
 
+  // text initialization
   stanza1 = createGraphics(200, 200, WEBGL);
   stanza2 = createGraphics(200, 200, WEBGL);
   stanza3 = createGraphics(200, 200, WEBGL);
@@ -66,10 +69,13 @@ function setup() {
   stanza7 = createGraphics(200, 200, WEBGL);
   stanza8 = createGraphics(200, 200, WEBGL);
 
+  // where the star is created depends upon this random integer pair
   randomIndexI = floor(random(0, TOTAL));
   randomIndexJ = floor(random(0, TOTAL));
 
-  // code grifted from spherical geometry coding challenge
+  // code involving spherical geometry has been grifted from the spherical geometry coding challenge
+  // it is important that flowers are stored in a 2D array so that they can be more easily accessed using the arrow keys
+  // coordinates for the sphere and its corresponding greyscale values are stored as well
   for (let i = 0; i < TOTAL + 1; i++) {
     let latitude = map(i, 0, TOTAL + 1, 0, PI);
     flowrs[i] = [];
@@ -91,13 +97,24 @@ function setup() {
         let r2 = r1 - 32;
         let g2 = g1 - 32;
         let b2 = b1 - 32;
-        flowrs[i][j] = new FreakieFlowr(x, y, z, r1, g1, b1, latitude, longitude, r2, g2, b2);
-      }
-      else {
+        flowrs[i][j] = new FreakieFlowr(
+          x,
+          y,
+          z,
+          r1,
+          g1,
+          b1,
+          latitude,
+          longitude,
+          r2,
+          g2,
+          b2
+        );
+      } else {
         flowrs[i][j] = new Flowr(x, y, z, r, g, b, a, latitude, longitude);
       }
       globe[i][j] = createVector(x, y, z);
-      shading[i][j] = ((r + g + b) / 3) - 32;
+      shading[i][j] = (r + g + b) / 3 - 32;
     }
   }
 }
@@ -105,10 +122,6 @@ function setup() {
 function draw() {
   orbitControl();
   currentState.draw();
-}
-
-function mousePressed() {
-  currentState.mousePressed();
 }
 
 function keyReleased() {

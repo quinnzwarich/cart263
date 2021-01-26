@@ -7,7 +7,6 @@ class State {
   }
 
   draw() {
-    background(250);
     this.display();
     this.text();
   }
@@ -16,7 +15,7 @@ class State {
 
   }
 
-  // code also grifted from spherical geometry coding challenge
+  // code for drawing the surface also grifted from spherical geometry coding challenge
   surface() {
     for (let i = 0; i < TOTAL; i++) {
       beginShape(TRIANGLE_STRIP);
@@ -42,6 +41,7 @@ class State {
     this.flowrs();
   }
 
+  // ensures that the user won't be stuck at the end of a column or row
   bounds() {
     if (this.selectedI > TOTAL) {
       this.selectedI = 0;
@@ -57,12 +57,9 @@ class State {
     }
   }
 
-  mousePressed() {
-    if (!theme.isPlaying()) {
-       theme.loop();
-     }
-  }
-
+  // selects flowers using the arrow keys
+  // there are some problems with using this system but it generally works
+  // for example, the direction will sometimes become inverted when the user switches indices
   keyReleased() {
     this.bounds();
 
@@ -87,7 +84,19 @@ class State {
     }
   }
 
+  // starts music when the user presses a key relevant to the controls
+  // this music was sampled from a strange rabbit plushy I have 
   keyPressed() {
+    if (keyCode === LEFT_ARROW ||
+    keyCode === RIGHT_ARROW ||
+    keyCode === UP_ARROW ||
+    keyCode === DOWN_ARROW ||
+    keyCode === 32) {
+      if (!theme.isPlaying()) {
+        theme.loop();
+      }
+    }
+
     if (keyCode === 32) {
       spacebar = true;
     }

@@ -6,7 +6,7 @@ Quinn Zwarich
 
 This was aesthetically inspired by the game Lovely Planet
 though in any other regard it is not very similar. It strays
-a little far from sausage dog but makes use of most of the ideas
+a little far from sausage dog as well but makes use of most of the ideas
 from the activity such as using polymorphism to create a special
 object that the user must find.
 **************************************************/
@@ -50,6 +50,7 @@ function preload() {
 function setup() {
   createCanvas(600, 600, WEBGL);
   userStartAudio();
+  // cam = createCamera();
   currentState = new Title();
 
   // audio settings

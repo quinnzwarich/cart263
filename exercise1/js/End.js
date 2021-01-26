@@ -34,7 +34,7 @@ class End extends State {
     stanza5.fill(255, 0, 0);
     stanza5.textFont(grotesk);
     stanza5.textSize(10);
-    stanza5.text(`Your wish has gone and`, 0, 0);
+    stanza5.text(`Your wish has left you all`, 0, 0);
     rotate(this.outerRing);
     texture(stanza5);
     torus(800, 400, 24, 2);
@@ -44,7 +44,7 @@ class End extends State {
     stanza6.fill(255, 0, 0);
     stanza6.textFont(grotesk);
     stanza6.textSize(10);
-    stanza6.text(`left Now what will you do?`, 0, 0);
+    stanza6.text(`alone What are you to do?`, 0, 0);
     rotate(31 * PI/32)
     rotate(this.outerRing);
     texture(stanza6);

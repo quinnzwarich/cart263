@@ -36,6 +36,10 @@ class State {
 
   }
 
+  perspective() {
+    
+  }
+
   display() {
     this.surface();
     this.flowrs();
@@ -85,7 +89,7 @@ class State {
   }
 
   // starts music when the user presses a key relevant to the controls
-  // this music was sampled from a strange rabbit plushy I have 
+  // this music was sampled from a strange rabbit plushy I have
   keyPressed() {
     if (keyCode === LEFT_ARROW ||
     keyCode === RIGHT_ARROW ||

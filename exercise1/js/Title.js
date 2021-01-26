@@ -85,6 +85,12 @@ class Title extends State {
     }
   }
 
+  perspective() {
+    // let vector = globe[this.selectedI][this.selectedJ];
+    // let vantage = p5.Vector.mult(vector, 6);
+    // cam.setPosition(vantage.x, vantage.y, vantage.z);
+  }
+
   // responsible for playing sound effects
   // all sound effects were made using BeepBox
   keyReleased() {

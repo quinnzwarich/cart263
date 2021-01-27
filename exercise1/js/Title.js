@@ -85,10 +85,26 @@ class Title extends State {
     }
   }
 
+  // begins with camera overlooking the planet so the user can read the text
+  // after this point the camera snaps toward each selected flower
   perspective() {
-    // let vector = globe[this.selectedI][this.selectedJ];
-    // let vantage = p5.Vector.mult(vector, 6);
-    // cam.setPosition(vantage.x, vantage.y, vantage.z);
+    let vector = globeCopy[this.selectedI][this.selectedJ];
+    let vantage = p5.Vector.mult(vector, this.zoom);
+
+    vecPositions.push(vector);
+    if (vecPositions.length > MAX_POSITIONS) {
+      vecPositions.shift();
+    }
+    vanPositions.push(vantage);
+    if (vanPositions.length > MAX_POSITIONS) {
+      vanPositions.shift();
+    }
+
+    let interVector = p5.Vector.lerp(vecPositions[0], vecPositions[1], 0.1, vecPositions[0]);
+    let interVantage = p5.Vector.lerp(vanPositions[0], vanPositions[1], 0.1, vanPositions[0]);
+
+    cam.setPosition(interVantage.x, interVantage.y, interVantage.z);
+    cam.lookAt(interVector.x, interVector.y, interVector.z);
   }
 
   // responsible for playing sound effects
@@ -101,10 +117,12 @@ class Title extends State {
       keyCode === UP_ARROW ||
       keyCode === DOWN_ARROW) {
       bobfx.play();
+      this.zoom = 2;
     }
 
     if (keyCode === 32) {
       selectfx.play();
+      this.zoom = 2;
     }
   }
 

@@ -3,6 +3,8 @@ class End extends State {
     super();
     this.mod = 1;
     this.bg = 0;
+    this.shake = 0;
+    this.rumble = 0;
   }
 
   draw() {
@@ -12,6 +14,8 @@ class End extends State {
   }
 
   // slows the music as well as changes the background colour
+  // goes from 1 to 0 and then to 0.1 and then back to zero in perpetuity
+  // this creates a pulsating in the music
   modulate() {
     theme.rate(this.mod);
 
@@ -84,6 +88,26 @@ class End extends State {
           flower.state = `departing`;
         }
       }
+    }
+  }
+
+  // returns back to the initial perspective as the text has changed
+  // camera snaps toward the star as the music pulses
+  perspective() {
+    let vector = globeCopy[0][0];
+    let vantage = p5.Vector.mult(vector, this.zoom);
+    this.shake = random(-PI/256, PI/256);
+    this.rumble = random(-PI/256, PI/256);
+
+    if (this.mod > 0) {
+      cam.setPosition(vantage.x, vantage.y, vantage.z);
+      cam.lookAt(vector.x, vector.y, vector.z);
+      cam.pan(this.shake);
+      cam.tilt(this.rumble);
+    }
+    else {
+      cam.setPosition(vecPositions[1].x, vecPositions[1].y, vecPositions[1].z);
+      cam.lookAt(vanPositions[1].x, vanPositions[1].y, vanPositions[1].z);
     }
   }
 

@@ -7,7 +7,7 @@ Quinn Zwarich
 This was aesthetically inspired by the game Lovely Planet
 though in any other regard it is not very similar. It strays
 a little far from sausage dog as well but makes use of most of the ideas
-from the activity such as using polymorphism to create a special
+from the activity such as using inheritance to create a special
 object that the user must find.
 **************************************************/
 
@@ -30,11 +30,15 @@ let stanza8;
 
 let flowrs = [];
 let globe = [];
+let globeCopy = [];
 let shading = [];
+let vecPositions = [];
+let vanPositions = [];
 
 const TOTAL = 9;
+const RADIUS = 200;
+const MAX_POSITIONS = 2;
 let spacebar = false;
-let radius = 200;
 let randomIndexI = 0;
 let randomIndexJ = 0;
 
@@ -50,7 +54,7 @@ function preload() {
 function setup() {
   createCanvas(600, 600, WEBGL);
   userStartAudio();
-  // cam = createCamera();
+  cam = createCamera();
   currentState = new Title();
 
   // audio settings
@@ -75,18 +79,17 @@ function setup() {
   randomIndexJ = floor(random(0, TOTAL));
 
   // code involving spherical geometry has been grifted from the spherical geometry coding challenge
-  // it is important that flowers are stored in a 2D array so that they can be more easily accessed using the arrow keys
-  // coordinates for the sphere and its corresponding greyscale values are stored as well
+  // https://thecodingtrain.com/CodingChallenges/025-spheregeometry.html
   for (let i = 0; i < TOTAL + 1; i++) {
-    let latitude = map(i, 0, TOTAL + 1, 0, PI);
-    flowrs[i] = [];
+    let latitude = map(i, 0, TOTAL, 0, PI);
+    flowrs[i] = []; // flowers are stored in a 2D array so they can be more easily accessed using the arrow keys
     globe[i] = [];
-    shading[i] = [];
+    globeCopy[i] = []; // I had to copy the globe coordinates in order to fix a bug I ran into while messing with the camera
     for (let j = 0; j < TOTAL + 1; j++) {
       let longitude = map(j, 0, TOTAL, 0, 2 * PI);
-      let x = radius * sin(latitude) * cos(longitude);
-      let y = radius * sin(latitude) * sin(longitude);
-      let z = radius * cos(latitude);
+      let x = RADIUS * sin(latitude) * cos(longitude);
+      let y = RADIUS * sin(latitude) * sin(longitude);
+      let z = RADIUS * cos(latitude);
       let r = map(noise(latitude), 0, 1, 127, 255);
       let g = map(noise(longitude), 0, 1, 127, 255);
       let b = map(noise(latitude, longitude), 0, 1, 127, 255);
@@ -115,13 +118,13 @@ function setup() {
         flowrs[i][j] = new Flowr(x, y, z, r, g, b, a, latitude, longitude);
       }
       globe[i][j] = createVector(x, y, z);
-      shading[i][j] = (r + g + b) / 3 - 32;
+      globeCopy[i][j] = createVector(x, y, z);
+      shading[i] = (r + g + b) / 3 - 32;
     }
   }
 }
 
 function draw() {
-  orbitControl();
   currentState.draw();
 }
 

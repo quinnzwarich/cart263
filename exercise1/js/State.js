@@ -4,23 +4,28 @@ class State {
     this.selectedJ = 0;
     this.outerRing = 0;
     this.innerRing = 0;
+    this.vecPositions = [];
+    this.vanPositions = [];
+    this.maxPositions = 2;
+    this.zoom = 4;
   }
 
   draw() {
     this.display();
     this.text();
+    this.perspective();
   }
 
   text() {
 
   }
 
-  // code for drawing the surface also grifted from spherical geometry coding challenge
+  // code for drawing the surface has also been grifted from the spherical geometry coding challenge
   surface() {
     for (let i = 0; i < TOTAL; i++) {
       beginShape(TRIANGLE_STRIP);
       for (let j = 0; j < TOTAL + 1; j++) {
-        let shade = shading[i][j];
+        let shade = shading[i];
         noStroke();
         fill(shade);
         let v1 = globe[i][j];
@@ -37,7 +42,7 @@ class State {
   }
 
   perspective() {
-    
+
   }
 
   display() {
@@ -65,8 +70,6 @@ class State {
   // there are some problems with using this system but it generally works
   // for example, the direction will sometimes become inverted when the user switches indices
   keyReleased() {
-    this.bounds();
-
     if (keyCode === LEFT_ARROW) {
       this.selectedI--;
     }
@@ -86,6 +89,8 @@ class State {
     else {
       this.selectedJ = this.selectedJ;
     }
+
+    this.bounds();
   }
 
   // starts music when the user presses a key relevant to the controls

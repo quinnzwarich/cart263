@@ -12,6 +12,9 @@ class FreakieFlowr extends Flowr {
     this.id = true;
   }
 
+  // a lot of this was based on the p5.js star example
+  // but this one is in 3D !!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // https://p5js.org/examples/form-star.html
   petals() {
     push();
     translate(this.v2);

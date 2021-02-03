@@ -4,6 +4,8 @@ class Draw {
     this.bounds = 64;
     this.offset = 8;
     this.mouse = false;
+    // thank you for the tip on looping in the constructor dana !
+    // I have started experimenting with doing more in the constructor as a result 
     for (let i = 0; i < this.bounds; i++) {
       this.values[i] = [];
       for (let j = 0; j < this.bounds; j++) {
@@ -12,6 +14,8 @@ class Draw {
     }
   }
 
+  // draws a grid that can be filled in
+  // the main idea is that it is a means of drawing that can be more easily committed to memory
   grid() {
     for (let i = 0; i < this.bounds; i++) {
       for (let j = 0; j < this.bounds; j++) {

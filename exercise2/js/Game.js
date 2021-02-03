@@ -8,6 +8,8 @@ class Game extends State {
       annyang.addCommands(commands);
       annyang.start();
     }
+    // animal is chosen from the very start
+    // there is now way to choose a new one until you guess it
     randomIndex = floor(random(0, animals.length));
     currentAnimal = animals[randomIndex];
     this.reverseAnimal = super.reverseString(currentAnimal);
@@ -31,6 +33,8 @@ class Game extends State {
     this.drawing.grid();
   }
 
+  // once the user guesses correctly they are permitted to draw and then to guess other animals
+  // if they get it wrong they will hear a random encouraging response
   guessAnimal(animal) {
     currentAnswer = animal.toLowerCase();
 
@@ -44,6 +48,8 @@ class Game extends State {
     }
   }
 
+  // for the time being drawings are only saved to an array 
+  // if you encounter the same animal twice in the same run you will be greeted by the same drawing
   keyPressed() {
     if (key && keyCode === 13) {
       key = false;

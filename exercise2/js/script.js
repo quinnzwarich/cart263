@@ -1,11 +1,11 @@
 "use strict";
 
 /**
-Title of Project
-Author Name
+Slamina+
+Quinn Zwarich
 
-This is a template. You must fill in the title,
-author, and this description to match your project!
+I wanted to figure out a way to store simple drawings to memory.
+This has yet to be fully realized but I think this is a decent start!
 */
 
 const animals = [
@@ -161,17 +161,6 @@ let currentAnimal = '';
 let currentAnswer = '';
 let currentState;
 
-/**
-Description of preload
-*/
-function preload() {
-
-}
-
-
-/**
-Description of setup
-*/
 function setup() {
   createCanvas(512, 512);
   textAlign(CENTER, CENTER);
@@ -182,10 +171,6 @@ function setup() {
   console.log(drawings);
 }
 
-
-/**
-Description of draw()
-*/
 function draw() {
   currentState.draw();
 }

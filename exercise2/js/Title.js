@@ -27,7 +27,7 @@ class Title extends State {
   outroText() {
     this.text = `say "I am ready" to begin`;
   }
-
+    
   keyPressed() {
     responsiveVoice.speak(this.welcome, "UK English Male", {
       onstart: this.introText(),
@@ -35,6 +35,7 @@ class Title extends State {
     });
   }
 
+  // user starts the game after saying "I am ready"
   startGame() {
     currentState = new Game();
   }

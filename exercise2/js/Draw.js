@@ -4,11 +4,16 @@ class Draw {
     this.bounds = 64;
     this.offset = 8;
     this.mouse = false;
+    for (let i = 0; i < this.bounds; i++) {
+      this.values[i] = [];
+      for (let j = 0; j < this.bounds; j++) {
+          this.values[i][j] = 255;
+      }
+    }
   }
 
   grid() {
     for (let i = 0; i < this.bounds; i++) {
-      this.values[i] = [];
       for (let j = 0; j < this.bounds; j++) {
         let x = i * this.offset;
         let y = j * this.offset;
@@ -20,8 +25,6 @@ class Draw {
           this.mouse === true
         ) {
           this.values[i][j] = 0;
-        } else {
-          this.values[i][j] = 255;
         }
         push();
         fill(this.values[i][j]);

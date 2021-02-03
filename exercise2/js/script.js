@@ -145,17 +145,22 @@ const animals = [
       "zebra"
     ];
 
-const correctResponse = [
-      "good job, I guess",
+const incorrectResponses = [
+      "try it again",
+      "do another attempt",
+      "take another crack at it",
+      "once more",
+      "give it another go",
+      "just keep trying"
     ];
 
-const incorrectResponse = [
-      "if you don't tell me the correct animal I'll actually kill you",
-    ];
-
+let drawings = [];
+let randomIndex = 0;
+let key = false;
 let currentAnimal = '';
 let currentAnswer = '';
-let drawAnimal;
+let currentState;
+
 /**
 Description of preload
 */
@@ -169,16 +174,12 @@ Description of setup
 */
 function setup() {
   createCanvas(512, 512);
+  textAlign(CENTER, CENTER);
+  textSize(32);
 
-  drawAnimal = new Draw();
-
-  if (annyang) {
-    let commands = {
-      'I think it is *animal': guessAnimal
-    };
-    annyang.addCommands(commands);
-    annyang.start();
-  }
+  currentState = new Title();
+  drawings.length = animals.length;
+  console.log(drawings);
 }
 
 
@@ -186,44 +187,17 @@ function setup() {
 Description of draw()
 */
 function draw() {
-  background(127);
-  drawAnimal.grid();
+  currentState.draw();
 }
 
-function mousePressed() {
-  currentAnimal = random(animals);
-  let reverseAnimal = reverseString(currentAnimal);
-  responsiveVoice.speak(reverseAnimal);
-}
-
-function guessAnimal(animal) {
-  currentAnswer = animal.toLowerCase();
-
-  if (currentAnswer === currentAnimal) {
-    let reply = correctResponses[0];
-    responsiveVoice.speak(reply);
-  }
-  else {
-    let reply = incorrectResponse[0];
-    responsiveVoice.speak(reply);
-  }
-}
-
-function reverseString(string) {
-  // Split the string into an array of characters
-  let characters = string.split('');
-  // Reverse the array of characters
-  let reverseCharacters = characters.reverse();
-  // Join the array of characters back into a string
-  let result = reverseCharacters.join('');
-  // Return the result
-  return result;
+function keyPressed() {
+  currentState.keyPressed();
 }
 
 function mouseDragged() {
-  drawAnimal.mouseDragged();
+  currentState.mouseDragged();
 }
 
 function mouseReleased() {
-  drawAnimal.mouseReleased();
+  currentState.mouseReleased();
 }

@@ -16,15 +16,14 @@ class Game extends State {
     responsiveVoice.speak(this.reverseAnimal);
     // if a drawing is already there, display it
     // if it isn't, make a new one
-    if (drawings[randomIndex] === undefined) {
+    if (getItem(`${randomIndex}`) === null) {
       this.drawing = new Draw();
     }
     else {
       // I haven't actually figured out local memory yet
       // this is as close as I got
       // it would be easier if there was way to view local storage but I'm not certain as to how
-      // this.drawing = getItem(`${randomIndex}`);
-      this.drawing = drawings[randomIndex];
+      this.drawing = JSON.parse(getItem(`${randomIndex}`));
     }
   }
 
@@ -48,13 +47,13 @@ class Game extends State {
     }
   }
 
-  // for the time being drawings are only saved to an array 
+  // for the time being drawings are only saved to an array
   // if you encounter the same animal twice in the same run you will be greeted by the same drawing
   keyPressed() {
     if (key && keyCode === 13) {
       key = false;
-      drawings.splice(randomIndex, 1, this.drawing);
-      // storeItem(`${randomIndex}`, this.drawing);
+      // drawings.splice(randomIndex, 1, this.drawing);
+      storeItem(`${randomIndex}`, JSON.stringify(this.drawing));
       currentState = new Game;
     }
   }

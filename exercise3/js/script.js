@@ -2,9 +2,8 @@
 Spy Profile Generator++
 Quinn Zwarich
 
-I attempted to make an algorithm that could encode a message and later
-decode the same message based on interaction from the user.
-I have not yet succeeded.
+I made an algorithm that encodes a message and later
+decodes the same message based on interaction from the user.
 ******************/
 
 let spyProfile = {

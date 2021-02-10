@@ -46,8 +46,7 @@ class Encrypt {
     // then convert them back into their corresponding letter value
     for (let i = 0; i < this.arrays.length; i++) {
       let vector = math.multiply(inverseMatrix, this.arrays[i]);
-      let stringVector = [String.fromCharCode(97 + vector[0]), String.fromCharCode(97 + vector[1])];
-      console.log(vector);
+      let stringVector = [String.fromCharCode(97 + vector._data[0]), String.fromCharCode(97 + vector._data[1])];
       this.arrays.splice(i, 1, stringVector);
     }
   }

@@ -35,7 +35,6 @@ class Encrypt {
 
   decode() {
     // calculate the inverse matrix
-    // I know this part works
     let inverseMultiplier =
     1 / ((this.randomInts.ii * this.randomInts.jj) - (this.randomInts.ij * this.randomInts.ji));
     let moddedMatrix = math.matrix([[this.randomInts.jj, -this.randomInts.ij],

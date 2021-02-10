@@ -22,6 +22,7 @@ let planetData;
 
 let phrase = ``;
 let message;
+let key = true;
 
 function preload() {
   flowerData = loadJSON(`https://raw.githubusercontent.com/dariusk/corpora/master/data/plants/flowers.json`);
@@ -59,7 +60,7 @@ function setup() {
 function generateSpyProfile() {
   spyProfile.name = prompt(`Agent! What is your name?!`);
   let flower = random(flowerData.flowers);
-  spyProfile.alias = `${flower}`;
+  spyProfile.alias = `the ${flower}`;
   spyProfile.secretWeapon = random(objectData.objects);
   let card = random(tarotData.tarot_interpretations);
   spyProfile.password = random(card.keywords);
@@ -87,5 +88,8 @@ Password: ${spyProfile.password}`;
 
 // for now all the user has to do is click to decode the message
 function mousePressed() {
-  message.mousePressed();
+  if (key) {
+    message.mousePressed();
+    key = false;
+  }
 }

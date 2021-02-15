@@ -28,35 +28,39 @@ function setup() {
     strings.push(string);
   }
 
-  // video = createCapture(VIDEO);
-  // video.hide();
-  //
-  // handpose = ml5.handpose(video, {
-  //   flipHorizontal:  true
-  // }, function() {
-  //   console.log(`model loaded`);
-  // });
-  //
-  // handpose.on(`predict`, function (results) {
-  //   // console.log(results);
-  //   predictions = results;
-  // });
+  video = createCapture(VIDEO);
+  video.hide();
+
+  handpose = ml5.handpose(video, {
+    flipHorizontal:  true
+  }, function() {
+    console.log(`model loaded`);
+  });
+
+  handpose.on(`predict`, function (results) {
+    // console.log(results);
+    predictions = results;
+  });
 }
 
 function draw() {
   background(0);
   displayGuitar();
 
-  // if (predictions.length > 0) {
-  //   let hand = predictions[0];
-  //   let index = hand.annotations.indexFinger;
-  //   let tip = index[3];
-  //   let base = index[0];
-  //   let tipX = tip[0];
-  //   let tipY = tip[1];
-  //   let baseX = base[0];
-  //   let baseY = base[1];
-  // }
+  if (predictions.length > 0) {
+    // these are all at the tip of each finger
+    let hand = predictions[0];
+    let thumb = hand.annotations.thumb[3];
+    let thumbCoords = { x: thumb[0], y: thumb[1] };
+
+    ellipse(thumbCoords.x, thumbCoords.y, 20);
+
+    for (let i = 0; i < strings.length; i++) {
+      let string = strings[i];
+      string.states();
+      string.hitDetection(thumbCoords);
+    }
+  }
 }
 
 function displayGuitar() {

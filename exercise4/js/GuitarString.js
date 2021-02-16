@@ -1,18 +1,22 @@
 class GuitarString {
-  constructor(y) {
+  constructor(y, f) {
     this.y = y;
+    this.frequency = f;
     this.xSpacing = 8;
     this.width = 432;
     this.theta = 0;
     this.amplitude = 0;
-    this.period = 432;
+    this.period = 216;
     this.deltaX = (TWO_PI / this.period) * this.xSpacing;
     this.yValues = new Array(floor(this.width / this.xSpacing));
-    this.state = `resting`;
   }
 
   vibrate() {
-    this.theta += 0.66;
+    // I borrowed this function from the p5.js examples page
+    // https://p5js.org/examples/math-sine-wave.html
+    // it calculates the amplitude values of a sine wave
+    // this is meant to resemble a plucked guitar string
+    this.theta += this.frequency;
     let x = this.theta;
     for (let i = 0; i < this.yValues.length; i++) {
       this.yValues[i] = sin(x) * this.amplitude;
@@ -20,42 +24,27 @@ class GuitarString {
     }
   }
 
-  hitDetection(thumbCoords) {
+  hitDetection(thumbCoords, sound) {
     if (thumbCoords.y < this.y + (this.xSpacing/4) &&
     thumbCoords.y > this.y - (this.xSpacing/4) &&
     thumbCoords.x <= this.width) {
-      this.state = `excited`;
-    }
-  }
-
-  resting() {
-    if (this.state === `resting`) {
+      // play the note
+      sound.playMode(`untilDone`);
+      sound.play();
+    } if (sound.isPlaying()) {
+      // get amplitude of the note while active
+      let getAmp = amp.getLevel();
+      this.amplitude = getAmp;
+    } else {
+      // if a note isn't active,
+      // ensure the amplitude is zero
       this.amplitude = 0;
     }
   }
 
-  excited() {
-    if (this.state === `excited`) {
-      this.amplitude += 0.05;
-      console.log(this.amplitude);
-      if (this.amplitude >= 1) {
-        this.amplitude -= 0.05;
-        console.log(`true`);
-        if (this.amplitude <= 0) {
-          this.state = `resting`;
-        }
-      }
-    }
-  }
-
-  states() {
-    this.resting();
-    this.excited();
-  }
-
   display() {
+    // displays the segments which make up the string
     push();
-    fill(255);
     beginShape();
     for (let i = 0; i < this.yValues.length; i++) {
       vertex(i * this.xSpacing, this.y + this.yValues[i]);

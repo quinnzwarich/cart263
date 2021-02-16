@@ -65,22 +65,29 @@ function draw() {
   displayText();
 
   if (predictions.length > 0) {
-    // I chose to use just the thumb to make things simpler
-    // if you could only use one finger to strum a guitar,
-    // I reckon that finger would be your thumb
+    // the program uses the the thumb, index finger, and middle finger
+    // I want the user to approach playing as though they were finger picking,
+    // without needing to have more hit detection than is necessary
     let hand = predictions[0];
     let thumb = hand.annotations.thumb[3];
     let thumbCoords = { x: thumb[0], y: thumb[1] };
+    let index = hand.annotations.indexFinger[3];
+    let indexCoords = { x: index[0], y: index[1] };
+    let middle = hand.annotations.middleFinger[3];
+    let middleCoords = { x: middle[0], y: middle[1] };
 
+    // display the finger tips
     push();
     noStroke();
     ellipse(thumbCoords.x, thumbCoords.y, 20);
+    ellipse(indexCoords.x, indexCoords.y, 20);
+    ellipse(middleCoords.x, middleCoords.y, 20);
     pop();
 
     for (let i = 0; i < strings.length; i++) {
       let string = strings[i];
       let sound = sounds[i];
-      string.hitDetection(thumbCoords, sound);
+      string.hitDetection(thumbCoords, indexCoords, middleCoords, sound);
     }
   }
 }

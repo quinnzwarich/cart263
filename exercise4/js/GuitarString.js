@@ -24,17 +24,23 @@ class GuitarString {
     }
   }
 
-  hitDetection(thumbCoords, sound) {
+  hitDetection(thumbCoords, indexCoords, middleCoords, sound) {
     if (thumbCoords.y < this.y + (this.xSpacing/4) &&
     thumbCoords.y > this.y - (this.xSpacing/4) &&
-    thumbCoords.x <= this.width) {
+    thumbCoords.x <= this.width ||
+    indexCoords.y < this.y + (this.xSpacing/4) &&
+    indexCoords.y > this.y - (this.xSpacing/4) &&
+    indexCoords.x <= this.width ||
+    middleCoords.y < this.y + (this.xSpacing/4) &&
+    middleCoords.y > this.y - (this.xSpacing/4) &&
+    middleCoords.x <= this.width) {
       // play the note
       sound.playMode(`untilDone`);
       sound.play();
     } if (sound.isPlaying()) {
       // get amplitude of the note while active
       let getAmp = amp.getLevel();
-      this.amplitude = getAmp;
+      this.amplitude = getAmp * 2;
     } else {
       // if a note isn't active,
       // ensure the amplitude is zero
@@ -45,6 +51,7 @@ class GuitarString {
   display() {
     // displays the segments which make up the string
     push();
+    fill(0);
     beginShape();
     for (let i = 0; i < this.yValues.length; i++) {
       vertex(i * this.xSpacing, this.y + this.yValues[i]);

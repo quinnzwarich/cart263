@@ -10,9 +10,6 @@ It is not only meant to be an intrepetation of the song but as well a tool for u
 
 let lyricData;
 
-let search = ``;
-let url = ``;
-
 let findLyric = {
   verse: 0,
   stanza: 0,
@@ -22,12 +19,14 @@ let morrison = {
   rate: 4000,
   images: [],
   words: [],
+  searches: [],
   callback: false
 };
 let reed = {
   rate: 0,
   images: [],
   words: [],
+  searches: [],
   callback: false
 };
 
@@ -63,6 +62,7 @@ function sequenceMorrison() {
   console.log(findLyric.index);
   console.log(findLyric.stanza);
   console.log(findLyric.verse);
+  console.log(morrison.searches);
 
   if (findLyric.index <
   lyricData.verses[findLyric.verse][findLyric.stanza].morrison.length &&
@@ -86,10 +86,11 @@ function sequenceMorrison() {
 
 
 function displayMorrison() {
-  search = lyricData.verses[findLyric.verse][findLyric.stanza].morrison[findLyric.index];
-  url = `https://loremflickr.com/320/240/${search}`;
-  if (morrison.images.length === 0 &&
-  morrison.words.length === 0) {
+  if (morrison.searches.length === 0) {
+    // search for the first image
+    let search = lyricData.verses[findLyric.verse][findLyric.stanza].morrison[findLyric.index];
+    let url = `https://loremflickr.com/320/240/${search}`;
+    morrison.searches.push(search);
     // cue the sequence
     morrison.callback = true;
     // display the first word
@@ -100,7 +101,34 @@ function displayMorrison() {
     `anonymous`, morrisonCallback);
     morrison.images.push(img);
   }
+  else if (morrison.searches.length === 1) {
+    // find the previous and current search
+    let previousSearch = morrison.searches[0];
+    let search = lyricData.verses[findLyric.verse][findLyric.stanza].morrison[findLyric.index];
+    let url = `https://loremflickr.com/320/240/${previousSearch},${search}/all`;
+    morrison.searches.push(search);
+    // cue the sequence
+    morrison.callback = true;
+    // remove the previous image
+    let trash = morrison.images[0];
+    trash.remove();
+    morrison.images.shift();
+    // display the current word
+    let word = createDiv(`${search}`);
+    morrison.words.push(word);
+    // display the current image
+    let img = createImg(url, ``,
+    `anonymous`, morrisonCallback);
+    morrison.images.push(img);
+  }
   else {
+    // remove the least recent search
+    morrison.searches.shift();
+    // find the previous and current search
+    let previousSearch = morrison.searches[0];
+    let search = lyricData.verses[findLyric.verse][findLyric.stanza].morrison[findLyric.index];
+    let url = `https://loremflickr.com/320/240/${previousSearch},${search}/all`;
+    morrison.searches.push(search);
     // cue the sequence
     morrison.callback = true;
     // remove the previous image

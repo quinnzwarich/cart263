@@ -19,14 +19,16 @@ let findLyric = {
   index: 0
 };
 let morrison = {
-  rate: 0,
+  rate: 4000,
   images: [],
-  words: []
+  words: [],
+  callback: false
 };
 let reed = {
   rate: 0,
   images: [],
-  words: []
+  words: [],
+  callback: false
 };
 
 function preload() {
@@ -42,104 +44,91 @@ function setup() {
 function assessRate() {
   let mLength = lyricData.verses[findLyric.verse][findLyric.stanza].morrison.length;
   let rLength = lyricData.verses[findLyric.verse][findLyric.stanza].reed.length;
-
+  // compare the length of each vocalists stanza
   let mPercent = 100 / mLength;
   let rPercent = 100 / rLength;
   let ratio = mPercent / rPercent;
-
-  morrison.rate = 500;
+  // determine the rate at which sterling speaks
+  // in relation to how quickly his image can be loaded
+  if (morrison.callback) {
+    morrison.rate = 0;
+    morrison.rate++;
+  }
+  // lou always speaks fewer words
+  // so determine his rate in relation to sterling's
   reed.rate = morrison.rate * ratio;
 }
 
 function sequenceMorrison() {
-  if (
-    findLyric.index <=
-    lyricData.verses[findLyric.verse][findLyric.stanza].morrison.length
-  ) {
-    findLyric.index++;
-  } else if (
-    findLyric.index >
-    lyricData.verses[findLyric.verse][findLyric.stanza].morrison.length
-  ) {
-    findLyric.stanza++;
-    findLyric.index = 0;
+  console.log(findLyric.index);
+  console.log(findLyric.stanza);
+  console.log(findLyric.verse);
+
+  if (findLyric.index <
+  lyricData.verses[findLyric.verse][findLyric.stanza].morrison.length &&
+  morrison.callback) {
     assessRate();
-    if (findLyric.stanza > lyricData.verses[findLyric.verse].length * 2) {
-      findLyric.verse++;
-      assessRate();
-      if (findLyric.verse > lyricData.verses.length) {
-        findLyric.index = 0;
+    findLyric.index++;
+    if (findLyric.index >=
+    lyricData.verses[findLyric.verse][findLyric.stanza].morrison.length) {
+      findLyric.index = 0;
+      findLyric.stanza++;
+      if (findLyric.stanza >= lyricData.verses[findLyric.verse].length) {
         findLyric.stanza = 0;
-        findLyric.verse = 0;
+        findLyric.verse++;
+        if (findLyric.verse > lyricData.verses.length) {
+          findLyric.verse = 0;
+        }
       }
     }
   }
 }
 
 
-function getMorrisonImage() {
+function displayMorrison() {
   search = lyricData.verses[findLyric.verse][findLyric.stanza].morrison[findLyric.index];
   url = `https://loremflickr.com/320/240/${search}`;
-  if (morrison.images.length === 0) {
-    // display the image
+  if (morrison.images.length === 0 &&
+  morrison.words.length === 0) {
+    // cue the sequence
+    morrison.callback = true;
+    // display the first word
+    let word = createDiv(`${search}`);
+    morrison.words.push(word);
+    // display the first image
     let img = createImg(url, ``,
-    `anonymous`, displayMorrisonWord);
+    `anonymous`, morrisonCallback);
     morrison.images.push(img);
   }
   else {
+    // cue the sequence
+    morrison.callback = true;
     // remove the previous image
     let trash = morrison.images[0];
     trash.remove();
     morrison.images.shift();
-    // remove the previous word
-    let garbage = morrison.words[0];
-    garbage.remove();
-    morrison.words.shift();
+    // display the current word
+    let word = createDiv(`${search}`);
+    morrison.words.push(word);
     // display the current image
     let img = createImg(url, ``,
-    `anonymous`, displayMorrisonWord);
+    `anonymous`, morrisonCallback);
     morrison.images.push(img);
   }
 }
 
-function displayMorrisonWord() {
-  // display the current word
-  let word = createDiv(`${search}`);
-  morrison.words.push(word);
-}
-
-function getReedImage() {
-  let search = lyricData.verses[findLyric.verse][findLyric.stanza].reed[findLyric.index];
-  let url = `https://loremflickr.com/320/240/${search}`;
-  if (reed.images.length === 0) {
-    // display the image
-    let img = createImg(url);
-    reed.images.push(img);
-    // display the word
-    let word = createDiv(`${search}`);
-    reed.words.push(word);
-  }
-  else {
-    // remove the previous image
-    let trash = reed.images[0];
-    trash.remove();
-    reed.images.shift();
-    // remove the previous word
-    let garbage = reed.words[0];
-    garbage.remove();
-    reed.words.shift();
-    // display the current image
-    let img = createImg(url);
-    reed.images.push(img);
-    // display the current word
-    let word = createDiv(`${search}`);
-    reed.words.push(word);
-  }
+function morrisonCallback() {
+  // remove the previous word
+  let garbage = morrison.words[0];
+  garbage.remove();
+  morrison.words.shift();
+  // cue the sequence
+  morrison.callback = false;
 }
 
 function updateMorrison() {
+  displayMorrison();
   sequenceMorrison();
-  getMorrisonImage();
 }
 
 function mousePressed() {

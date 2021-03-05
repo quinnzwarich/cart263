@@ -15,7 +15,21 @@ body {
   display: grid; /* Set up the grid and justify/align to center */
   justify-content: center;
   align-content: center;
-  width: 100vh;
   height: 100vh; /* Body is the height of the viewport */
-  overflow: hidden; /* Hide anything that goes off the window size */
+}
+
+.morrison {
+  display: inline-block;
+  text-align: center;
+  font-size: 2.5rem;
+  color: pink;
+  background-color: blue;
+}
+
+.reed {
+  display: inline-block;
+  text-align: center;
+  font-size: 2.5rem;
+  color: blue;
+  background-color: pink;
 }

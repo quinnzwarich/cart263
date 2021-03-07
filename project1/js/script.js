@@ -10,8 +10,11 @@ It is not only meant to be an intrepetation of the song but as well a tool for u
 
 let lyricData;
 
+let dimI = 480;
+let dimJ = 360;
+
 let morrison = {
-  rate: 4000,
+  rate: 7500,
   callback: false,
   images: [],
   words: [],
@@ -19,9 +22,12 @@ let morrison = {
   stanza: 0,
   verse: 0,
   timer: undefined,
+  xCoords: [],
+  yCoords: [],
+  values: [],
 };
 let reed = {
-  rate: 4000,
+  rate: 7500,
   callback: false,
   images: [],
   words: [],
@@ -29,6 +35,9 @@ let reed = {
   stanza: 0,
   verse: 0,
   timer:undefined,
+  xCoords: [],
+  yCoords: [],
+  values: [],
 };
 
 function preload() {
@@ -36,10 +45,15 @@ function preload() {
 }
 
 function setup() {
-  noCanvas();
+  createCanvas(1020, 405);
   assessRate();
   startMorrison();
   startReed();
+}
+
+function draw() {
+  background(0);
+  display();
 }
 
 function assessRate() {
@@ -110,6 +124,162 @@ function sequenceReed() {
   }
 }
 
+function loadMorrison() {
+  if (morrison.images === 0) {
+    // find the first image
+    let search = lyricData.verses[morrison.verse][morrison.stanza].morrison[morrison.index];
+    let url = `https://loremflickr.com/480/360/${search}`;
+    // cue the sequence
+    morrison.callback = true;
+    // render the image
+    let img = loadImage(url, renderMorrison);
+    morrison.images.push(img);
+  }
+  else {
+    // find the current image
+    let search = lyricData.verses[morrison.verse][morrison.stanza].morrison[morrison.index];
+    let url = `https://loremflickr.com/480/360/${search}`;
+    // cue the sequence
+    morrison.callback = true;
+    // remove the previous image
+    morrison.images.shift();
+    morrison.values.length = 0;
+    morrison.xCoords.length = 0;
+    morrison.yCoords.length = 0;
+    // render the current image
+    let img = loadImage(url, renderMorrison);
+    morrison.images.push(img);
+  }
+}
+
+function renderMorrison() {
+  let index = morrison.images.length - 1;
+  let img = morrison.images[index];
+  img.loadPixels();
+
+  for (let j = 45; j < dimJ; j+= 2) {
+    for (let i = 60; i < dimI; i+= 2) {
+      let index = (j * dimI + i) * 4;
+      let r = img.pixels[index + 0];
+      let g = img.pixels[index + 1];
+      let b = img.pixels[index + 2];
+      let bright = (r + g + b) / 3;
+      if (bright < 150) {
+        morrison.xCoords.push(i);
+        morrison.yCoords.push(j);
+        morrison.values.push(bright);
+      } else {
+        morrison.xCoords.push(i);
+        morrison.yCoords.push(j);
+        morrison.values.push(0);
+      }
+    }
+  }
+  // cue the sequence
+  morrison.callback = false;
+}
+
+function updateMorrison() {
+  loadMorrison();
+  sequenceMorrison();
+}
+
+function loadReed() {
+  if (reed.images.length === 0) {
+    // find the first image
+    let search = lyricData.verses[reed.verse][reed.stanza].reed[reed.index];
+    let url = `https://loremflickr.com/480/360/${search}`;
+    // cue the sequence
+    reed.callback = true;
+    // render the image
+    let img = loadImage(url, renderReed);
+    reed.images.push(img);
+  }
+  else if (reed.images.length === 1) {
+    // find the current image
+    let search = lyricData.verses[reed.verse][reed.stanza].reed[reed.index];
+    let url = `https://loremflickr.com/480/360/${search}`;
+    // cue the sequence
+    reed.callback = true;
+    // remove the previous image
+    reed.images.shift();
+    reed.values.length = 0;
+    reed.xCoords.length = 0;
+    reed.yCoords.length = 0;
+    // render the current image
+    let img = loadImage(url, renderReed);
+    reed.images.push(img);
+  }
+}
+
+function renderReed() {
+  let index = reed.images.length - 1;
+  let img = reed.images[index];
+  img.loadPixels();
+
+  for (let j = 45; j < dimJ; j+= 2) {
+    for (let i = 60; i < dimI; i+= 2) {
+      let index = (j * dimI + i) * 4;
+      let r = img.pixels[index + 0];
+      let g = img.pixels[index + 1];
+      let b = img.pixels[index + 2];
+      let bright = (r + g + b) / 3;
+      if (bright < 150) {
+        reed.xCoords.push(i);
+        reed.yCoords.push(j);
+        reed.values.push(bright);
+      } else {
+        reed.xCoords.push(i);
+        reed.yCoords.push(j);
+        reed.values.push(0);
+      }
+    }
+  }
+  // cue the sequence
+  reed.callback = false;
+}
+
+function updateReed() {
+  loadReed();
+  sequenceReed();
+}
+
+function display() {
+  noStroke();
+  for (let i = 0; i < morrison.yCoords.length; i++) {
+    if (i % 2 === 0) {
+      if (morrison.values[i] !== 0) {
+        // display bright coordinates as ellipses
+        push();
+        fill(255, morrison.values[i]);
+        ellipse(morrison.xCoords[i], morrison.yCoords[i], morrison.values[i]/12);
+        pop();
+      } else {
+        // display dark coordinates as points
+        push();
+        strokeWeight(5);
+        point(morrison.xCoords[i], morrison.yCoords[i]);
+        pop();
+      }
+    } else {
+      if (reed.values[i] !== 0) {
+        // display bright coordinates as ellipses
+        push();
+        fill(255, reed.values[i]);
+        ellipse(reed.xCoords[i] + 480, reed.yCoords[i], reed.values[i]/12);
+        pop();
+      } else {
+        // display dark coordinates as points
+        push();
+        strokeWeight(5);
+        point(reed.xCoords[i] + 480, reed.yCoords[i]);
+        pop();
+      }
+    }
+  }
+}
+
+// antiquated code from previous iteration below
 
 function displayMorrison() {
   if (morrison.images.length === 0) {
@@ -155,11 +325,6 @@ function morrisonCallback() {
   morrison.callback = false;
 }
 
-function updateMorrison() {
-  displayMorrison();
-  sequenceMorrison();
-}
-
 function displayReed() {
   if (reed.images.length === 0) {
     // search for the first image
@@ -202,13 +367,4 @@ function reedCallback() {
   reed.words.shift();
   // cue the sequence
   reed.callback = false;
-}
-
-function updateReed() {
-  displayReed();
-  sequenceReed();
-}
-
-function mousePressed() {
-
 }

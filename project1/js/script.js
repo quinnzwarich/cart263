@@ -9,32 +9,34 @@ It is not only meant to be an intrepetation of the song but as well a tool for u
 */
 
 let lyricData;
+let cnv;
 
 let dimI = 480;
 let dimJ = 360;
 
 let morrison = {
-  rate: 7500,
-  callback: false,
+  toggle: false,
+  rate: 0,
   images: [],
   words: [],
   index: 0,
   stanza: 0,
   verse: 0,
   timer: undefined,
+  paragraph: undefined,
   xCoords: [],
   yCoords: [],
   values: [],
 };
 let reed = {
-  rate: 7500,
-  callback: false,
+  rate: 0,
   images: [],
   words: [],
   index: 0,
   stanza: 0,
   verse: 0,
-  timer:undefined,
+  timer: undefined,
+  paragraph: undefined,
   xCoords: [],
   yCoords: [],
   values: [],
@@ -45,10 +47,15 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(1020, 405);
-  assessRate();
+  // position canvas above text
+  cnv = createCanvas(1020, 405);
+  cnv.parent("canvas");
+  assessRateMorrison();
+  assessRateReed();
   startMorrison();
   startReed();
+  morrison.paragraph = document.getElementById("morrison");
+  reed.paragraph = document.getElementById("reed");
 }
 
 function draw() {
@@ -56,21 +63,25 @@ function draw() {
   display();
 }
 
-function assessRate() {
+function assessRateMorrison() {
   let mLength = lyricData.verses[morrison.verse][morrison.stanza].morrison.length;
   let rLength = lyricData.verses[reed.verse][reed.stanza].reed.length;
   // compare the length of each vocalists stanza
   let mPercent = 100 / mLength;
   let rPercent = 100 / rLength;
   let ratio = mPercent / rPercent;
-  // determine the rate at which sterling speaks
-  // in relation to how quickly his image can be loaded
-  if (morrison.callback) {
-    morrison.rate = 0;
-    morrison.rate++;
-  }
-  // lou always speaks fewer words
-  // so determine his rate in relation to sterling's
+  // determine sterling's rate in relation to the ratio
+  morrison.rate = 3000 / ratio;
+}
+
+function assessRateReed() {
+  let mLength = lyricData.verses[morrison.verse][morrison.stanza].morrison.length;
+  let rLength = lyricData.verses[reed.verse][reed.stanza].reed.length;
+  // compare the length of each vocalists stanza
+  let mPercent = 100 / mLength;
+  let rPercent = 100 / rLength;
+  let ratio = mPercent / rPercent;
+  // determine lou's rate in relation to sterling's
   reed.rate = morrison.rate / ratio;
 }
 
@@ -89,8 +100,7 @@ function sequenceMorrison() {
     morrison.index++;
     if (morrison.index >=
     lyricData.verses[morrison.verse][morrison.stanza].morrison.length) {
-      // only needs to be called once as it determines both rates
-      assessRate();
+      assessRateMorrison();
       morrison.index = 0;
       morrison.stanza++;
       if (morrison.stanza >= lyricData.verses[morrison.verse].length) {
@@ -109,8 +119,9 @@ function sequenceReed() {
   lyricData.verses[reed.verse][reed.stanza].reed.length &&
   reed.callback) {
     reed.index++;
-    if (reed.index >=
-    lyricData.verses[reed.verse][reed.stanza].reed.length) {
+     if (reed.index >=
+      lyricData.verses[reed.verse][reed.stanza].reed.length) {
+      assessRateReed();
       reed.index = 0;
       reed.stanza++;
       if (reed.stanza >= lyricData.verses[reed.verse].length) {
@@ -131,6 +142,10 @@ function loadMorrison() {
     let url = `https://loremflickr.com/480/360/${search}`;
     // cue the sequence
     morrison.callback = true;
+    // append the first lyric
+    let word = document.createTextNode(`${search} `);
+    morrison.paragraph.appendChild(word);
+    morrison.words.push(word);
     // render the image
     let img = loadImage(url, renderMorrison);
     morrison.images.push(img);
@@ -142,11 +157,23 @@ function loadMorrison() {
     // cue the sequence
     morrison.callback = true;
     // remove the previous image
-    morrison.images.shift();
     morrison.values.length = 0;
     morrison.xCoords.length = 0;
     morrison.yCoords.length = 0;
-    // render the current image
+    morrison.images.shift();
+    // clear the paragraph when the stanza ends
+    if (morrison.words.length > morrison.index + 1) {
+      morrison.paragraph.innerHTML = "";
+      morrison.words.length = 0;
+      // then append current lyric
+      let word = document.createTextNode(`${search} `);
+      morrison.paragraph.appendChild(word);
+      morrison.words.push(word);
+    } else { // otherwise just append the current lyric
+      let word = document.createTextNode(`${search} `);
+      morrison.paragraph.appendChild(word);
+      morrison.words.push(word);
+    }  // render the current image
     let img = loadImage(url, renderMorrison);
     morrison.images.push(img);
   }
@@ -191,6 +218,10 @@ function loadReed() {
     let url = `https://loremflickr.com/480/360/${search}`;
     // cue the sequence
     reed.callback = true;
+    // append the first lyric
+    let word = document.createTextNode(`${search} `);
+    reed.paragraph.appendChild(word);
+    reed.words.push(word);
     // render the image
     let img = loadImage(url, renderReed);
     reed.images.push(img);
@@ -202,11 +233,23 @@ function loadReed() {
     // cue the sequence
     reed.callback = true;
     // remove the previous image
-    reed.images.shift();
     reed.values.length = 0;
     reed.xCoords.length = 0;
     reed.yCoords.length = 0;
-    // render the current image
+    reed.images.shift();
+    // clear the paragraph when the stanza ends
+    if (reed.words.length > reed.index + 1) {
+      reed.paragraph.innerHTML = "";
+      reed.words.length = 0;
+      // then append current lyric
+      let word = document.createTextNode(`${search} `);
+      reed.paragraph.appendChild(word);
+      reed.words.push(word);
+    } else { // otherwise just append the current lyric
+      let word = document.createTextNode(`${search} `);
+      reed.paragraph.appendChild(word);
+      reed.words.push(word);
+    }  // render the current image
     let img = loadImage(url, renderReed);
     reed.images.push(img);
   }

@@ -15,7 +15,6 @@ let dimI = 480;
 let dimJ = 360;
 
 let morrison = {
-  toggle: false,
   rate: 0,
   images: [],
   words: [],
@@ -27,6 +26,11 @@ let morrison = {
   xCoords: [],
   yCoords: [],
   values: [],
+  colours: {
+    r: [],
+    g: [],
+    b: []
+  }
 };
 let reed = {
   rate: 0,
@@ -142,8 +146,13 @@ function loadMorrison() {
     let url = `https://loremflickr.com/480/360/${search}`;
     // cue the sequence
     morrison.callback = true;
-    // append the first lyric
+    // grab random colours
+    let r = random(morrison.colours.r);
+    let g = random(morrison.colours.g);
+    let b = random(morrison.colours.b);
+    // append and colour the first lyric
     let word = document.createTextNode(`${search} `);
+    morrison.paragraph.style.color = `rgb(${r}, ${g}, ${b})`;
     morrison.paragraph.appendChild(word);
     morrison.words.push(word);
     // render the image
@@ -157,20 +166,27 @@ function loadMorrison() {
     // cue the sequence
     morrison.callback = true;
     // remove the previous image
+    morrison.colours.length = 0;
     morrison.values.length = 0;
     morrison.xCoords.length = 0;
     morrison.yCoords.length = 0;
     morrison.images.shift();
+    // grab random colours
+    let r = random(morrison.colours.r);
+    let g = random(morrison.colours.g);
+    let b = random(morrison.colours.b);
     // clear the paragraph when the stanza ends
     if (morrison.words.length > morrison.index + 1) {
       morrison.paragraph.innerHTML = "";
       morrison.words.length = 0;
-      // then append current lyric
+      // then append current lyric and colour it
       let word = document.createTextNode(`${search} `);
+      morrison.paragraph.style.color = `rgb(${r}, ${g}, ${b})`;
       morrison.paragraph.appendChild(word);
       morrison.words.push(word);
-    } else { // otherwise just append the current lyric
+    } else { // otherwise just append and colour the current lyric
       let word = document.createTextNode(`${search} `);
+      morrison.paragraph.style.color = `rgb(${r}, ${g}, ${b})`;
       morrison.paragraph.appendChild(word);
       morrison.words.push(word);
     }  // render the current image
@@ -192,9 +208,15 @@ function renderMorrison() {
       let b = img.pixels[index + 2];
       let bright = (r + g + b) / 3;
       if (bright < 150) {
+        let red = map(noise(i / j), 0, 1, 150, 255);
+        let blue = map(noise(j / i), 0, 1, 150, 255);
+        let green = map(noise(i / j, j / i), 0, 1, 150, 255);
         morrison.xCoords.push(i);
         morrison.yCoords.push(j);
         morrison.values.push(bright);
+        morrison.colours.r.push(red);
+        morrison.colours.g.push(green);
+        morrison.colours.b.push(blue);
       } else {
         morrison.xCoords.push(i);
         morrison.yCoords.push(j);
@@ -292,9 +314,9 @@ function display() {
   for (let i = 0; i < morrison.yCoords.length; i++) {
     if (i % 2 === 0) {
       if (morrison.values[i] !== 0) {
-        // display bright coordinates as ellipses
+        // display bright coordinates as colourful translucent ellipses
         push();
-        fill(255, morrison.values[i]);
+        fill(morrison.colours.r[i], morrison.colours.g[i], morrison.colours.b[i], morrison.values[i]);
         ellipse(morrison.xCoords[i], morrison.yCoords[i], morrison.values[i]/12);
         pop();
       } else {
@@ -306,7 +328,7 @@ function display() {
       }
     } else {
       if (reed.values[i] !== 0) {
-        // display bright coordinates as ellipses
+        // display bright coordinates as white translucent ellipses
         push();
         fill(255, reed.values[i]);
         ellipse(reed.xCoords[i] + 480, reed.yCoords[i], reed.values[i]/12);

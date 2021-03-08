@@ -61,12 +61,15 @@ function setup() {
   cnv.parent("canvas");
   assessRateMorrison();
   assessRateReed();
+  // render the title screen
   renderTitle1();
   renderTitle2();
+  // order the document
   morrison.paragraph = document.getElementById("morrison");
   reed.paragraph = document.getElementById("reed");
 }
 
+// responsible for displaying images
 function draw() {
   background(0);
   display();
@@ -80,7 +83,7 @@ function assessRateMorrison() {
   let rPercent = 100 / rLength;
   let ratio = mPercent / rPercent;
   // determine sterling's rate in relation to the ratio
-  morrison.rate = 3000 / ratio;
+  morrison.rate = 3500 / ratio;
 }
 
 function assessRateReed() {
@@ -94,28 +97,34 @@ function assessRateReed() {
   reed.rate = morrison.rate / ratio;
 }
 
+// I initially made these timers into functions thinking they would allow for more control over the rate
 function startMorrison() {
   morrison.timer = setInterval(updateMorrison, morrison.rate);
 }
 
+// though I wasn't able to figure out a way to restart them without causing a terrible feedback loop
 function startReed() {
   reed.timer = setInterval(updateReed, reed.rate);
 }
 
 function sequenceMorrison() {
+  // advance through words
   if (morrison.index <
   lyricData.verses[morrison.verse][morrison.stanza].morrison.length &&
   morrison.callback) {
     morrison.index++;
     if (morrison.index >=
     lyricData.verses[morrison.verse][morrison.stanza].morrison.length) {
+      // advance through stanzas and recalculate the rate
       assessRateMorrison();
       morrison.index = 0;
       morrison.stanza++;
       if (morrison.stanza >= lyricData.verses[morrison.verse].length) {
+        // advance through verses
         morrison.stanza = 0;
         morrison.verse++;
         if (morrison.verse >= lyricData.verses.length) {
+          // do it all over again
           morrison.verse = 0;
         }
       }
@@ -124,19 +133,23 @@ function sequenceMorrison() {
 }
 
 function sequenceReed() {
+  // advance through words
   if (reed.index <
   lyricData.verses[reed.verse][reed.stanza].reed.length &&
   reed.callback) {
     reed.index++;
      if (reed.index >=
       lyricData.verses[reed.verse][reed.stanza].reed.length) {
+      // advance through stanzas and recalculate the rate
       assessRateReed();
       reed.index = 0;
       reed.stanza++;
       if (reed.stanza >= lyricData.verses[reed.verse].length) {
+        // advance through verses
         reed.stanza = 0;
         reed.verse++;
         if (reed.verse >= lyricData.verses.length) {
+          // do it all over again
           reed.verse = 0;
         }
       }
@@ -180,10 +193,9 @@ function loadMorrison() {
 }
 
 function renderMorrison() {
+  // choose the most recent image
   let index = morrison.images.length - 1;
-  let img = morrison.images[index];
-  img.loadPixels();
-
+  let img = morrison.images[index]; img.loadPixels();
   for (let j = 0; j < dimJ; j+= 2) {
     for (let i = 0; i < dimI; i+= 2) {
       let index = (j * dimI + i) * 4;
@@ -191,6 +203,8 @@ function renderMorrison() {
       let g = img.pixels[index + 1];
       let b = img.pixels[index + 2];
       let bright = (r + g + b) / 3;
+      // select the least bright values from the image
+      // record how bright they were
       if (bright < 150) {
         let red = map(noise(i / j), 0, 1, 150, 255);
         let blue = map(noise(j / i), 0, 1, 150, 255);
@@ -201,7 +215,7 @@ function renderMorrison() {
         morrison.colours.r.push(red);
         morrison.colours.g.push(green);
         morrison.colours.b.push(blue);
-      } else {
+      } else { // make the most bright values all dark
         morrison.xCoords.push(i);
         morrison.yCoords.push(j);
         morrison.values.push(0);
@@ -212,6 +226,7 @@ function renderMorrison() {
   morrison.callback = false;
 }
 
+// these functions are triggered by setInterval
 function updateMorrison() {
   loadMorrison();
   sequenceMorrison();
@@ -246,10 +261,9 @@ function loadReed() {
 }
 
 function renderReed() {
+  // choose the most recent image
   let index = reed.images.length - 1;
-  let img = reed.images[index];
-  img.loadPixels();
-
+  let img = reed.images[index]; img.loadPixels();
   for (let j = 0; j < dimJ; j+= 2) {
     for (let i = 0; i < dimI; i+= 2) {
       let index = (j * dimI + i) * 4;
@@ -257,11 +271,13 @@ function renderReed() {
       let g = img.pixels[index + 1];
       let b = img.pixels[index + 2];
       let bright = (r + g + b) / 3;
+      // select the least bright values from the image
+      // record how bright they were
       if (bright < 150) {
         reed.xCoords.push(i);
         reed.yCoords.push(j);
         reed.values.push(bright);
-      } else {
+      } else { // make the most bright values all dark
         reed.xCoords.push(i);
         reed.yCoords.push(j);
         reed.values.push(0);
@@ -272,6 +288,7 @@ function renderReed() {
   reed.callback = false;
 }
 
+// these functions are triggered by setInterval
 function updateReed() {
   loadReed();
   sequenceReed();
@@ -321,6 +338,8 @@ function renderTitle1() {
       let g = title1.pixels[index + 1];
       let b = title1.pixels[index + 2];
       let bright = (r + g + b) / 3;
+      // select the most bright values of the image
+      // record how bright they were
       if (bright > 150) {
         let red = map(noise(i / j), 0, 1, 150, 255);
         let blue = map(noise(j / i), 0, 1, 150, 255);
@@ -331,7 +350,7 @@ function renderTitle1() {
         morrison.colours.r.push(red);
         morrison.colours.g.push(green);
         morrison.colours.b.push(blue);
-      } else {
+      } else { // make the least bright values all dark
         morrison.xCoords.push(i);
         morrison.yCoords.push(j);
         morrison.values.push(0);
@@ -349,11 +368,13 @@ function renderTitle2() {
       let g = title2.pixels[index + 1];
       let b = title2.pixels[index + 2];
       let bright = (r + g + b) / 3;
+      // select the most bright values of the image
+      // record how bright they were
       if (bright > 150) {
         reed.xCoords.push(i);
         reed.yCoords.push(j);
         reed.values.push(bright);
-      } else {
+      } else { // make the least bright values all dark
         reed.xCoords.push(i);
         reed.yCoords.push(j);
         reed.values.push(0);
@@ -362,6 +383,8 @@ function renderTitle2() {
   }
 }
 
+// the user must advance from the title screen by pressing a key
+// variable user ensures they do not start the timers more than once
 function keyPressed() {
   if (user) {
     startMorrison();

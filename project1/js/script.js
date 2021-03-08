@@ -8,9 +8,14 @@ A visualization of The Murder Mystery, written by The Velvet Underground.
 It is not only meant to be an intrepetation of the song but as well a tool for understanding the dense lyricism.
 */
 
+// I made this JSON file myself
+// it is meant to organize stanzas and verses as well as who says what
 let lyricData;
+// this is the first half of the title
 let title1;
+// this is the second half of the title
 let title2;
+// canvas
 let cnv;
 
 let dimI = 480;
@@ -383,12 +388,21 @@ function renderTitle2() {
   }
 }
 
-// the user must advance from the title screen by pressing a key
-// variable user ensures they do not start the timers more than once
 function keyPressed() {
   if (user) {
     startMorrison();
     startReed();
+    // get rid of the title completely
+    morrison.colours.length = 0;
+    morrison.values.length = 0;
+    morrison.xCoords.length = 0;
+    morrison.yCoords.length = 0;
+    morrison.images.shift();
+    reed.values.length = 0;
+    reed.xCoords.length = 0;
+    reed.yCoords.length = 0;
+    reed.images.shift();
+    // ensure that the timers are only called once
     user = false;
   }
 }

@@ -26,14 +26,15 @@ body {
 
 #morrison {
   margin-left: 60px;
+  margin-right: 120px;
   text-align: left;
-  font-size: 1rem;
-  color: white;
+  font-size: 1.5rem;
 }
 
 #reed {
-  margin-left: 30px;
+  margin-left: -100px;
+  margin-right: 120px;
   text-align: left;
-  font-size: 1rem;
+  font-size: 1.5rem;
   color: white;
 }

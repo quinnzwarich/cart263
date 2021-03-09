@@ -112,7 +112,9 @@ function sequenceMorrison() {
     if (morrison.index >=
     lyricData.verses[morrison.verse][morrison.stanza].morrison.length) {
       // advance through stanzas and recalculate the rate
+      clearInterval(morrison.timer);
       assessRate();
+      startMorrison();
       morrison.index = 0;
       morrison.stanza++;
       if (morrison.stanza >= lyricData.verses[morrison.verse].length) {
@@ -137,7 +139,9 @@ function sequenceReed() {
      if (reed.index >=
       lyricData.verses[reed.verse][reed.stanza].reed.length) {
       // advance through stanzas and recalculate the rate
+      clearInterval(reed.timer);
       assessRate();
+      startReed();
       reed.index = 0;
       reed.stanza++;
       if (reed.stanza >= lyricData.verses[reed.verse].length) {
@@ -175,13 +179,17 @@ function loadMorrison() {
     morrison.words.length = 0;
     // then append current lyric and colour it
     let word = document.createTextNode(`${search} `);
-    morrison.paragraph.style.color = `rgb(${r}, ${g}, ${b})`;
-    morrison.paragraph.appendChild(word);
+    let span = document.createElement(`span`);
+    span.style.color = `rgb(${r}, ${g}, ${b})`;
+    span.appendChild(word);
+    morrison.paragraph.appendChild(span);
     morrison.words.push(word);
   } else { // otherwise just append and colour the current lyric
     let word = document.createTextNode(`${search} `);
-    morrison.paragraph.style.color = `rgb(${r}, ${g}, ${b})`;
-    morrison.paragraph.appendChild(word);
+    let span = document.createElement(`span`);
+    span.style.color = `rgb(${r}, ${g}, ${b})`;
+    span.appendChild(word);
+    morrison.paragraph.appendChild(span);
     morrison.words.push(word);
   }  // render the current image
   let img = loadImage(url, renderMorrison);
@@ -192,6 +200,7 @@ function renderMorrison() {
   // choose the most recent image
   let index = morrison.images.length - 1;
   let img = morrison.images[index]; img.loadPixels();
+  noiseSeed(morrison.index); noiseDetail(2, 0.25);
   for (let j = 0; j < dimJ; j+= 2) {
     for (let i = 0; i < dimI; i+= 2) {
       let index = (j * dimI + i) * 4;
@@ -205,13 +214,32 @@ function renderMorrison() {
         let red = map(noise(i / j), 0, 1, 150, 255);
         let blue = map(noise(j / i), 0, 1, 150, 255);
         let green = map(noise(i / j, j / i), 0, 1, 150, 255);
-        morrison.xCoords.push(i);
-        morrison.yCoords.push(j);
-        morrison.values.push(bright);
-        morrison.colours.r.push(red);
-        morrison.colours.g.push(green);
-        morrison.colours.b.push(blue);
-      } else { // make the most bright values all dark
+        // if a value is NaN or all three values make white
+        // make the value so small that the ellipse won't be seen
+        if (isNaN(red) || isNaN(green) || isNaN(blue)) {
+          morrison.xCoords.push(i);
+          morrison.yCoords.push(j);
+          morrison.values.push(0);
+          morrison.colours.r.push(red);
+          morrison.colours.g.push(green);
+          morrison.colours.b.push(blue);
+        } else if (floor(red) === floor(green) &&
+        floor(red) === floor(blue)) {
+          morrison.xCoords.push(i);
+          morrison.yCoords.push(j);
+          morrison.values.push(0);
+          morrison.colours.r.push(red);
+          morrison.colours.g.push(green);
+          morrison.colours.b.push(blue);
+        } else {
+          morrison.xCoords.push(i);
+          morrison.yCoords.push(j);
+          morrison.values.push(bright);
+          morrison.colours.r.push(red);
+          morrison.colours.g.push(green);
+          morrison.colours.b.push(blue);
+        }
+      } else { // make the bright values all dark
         morrison.xCoords.push(i);
         morrison.yCoords.push(j);
         morrison.values.push(0);

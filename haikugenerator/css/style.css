@@ -1,0 +1,10 @@
+body {
+  background-color: black;
+}
+
+#haiku {
+  margin-left: 1.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+}

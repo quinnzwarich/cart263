@@ -200,7 +200,7 @@ function renderMorrison() {
   // choose the most recent image
   let index = morrison.images.length - 1;
   let img = morrison.images[index]; img.loadPixels();
-  noiseSeed(morrison.index); noiseDetail(2, 0.25);
+  noiseSeed(morrison.index); 
   for (let j = 0; j < dimJ; j+= 2) {
     for (let i = 0; i < dimI; i+= 2) {
       let index = (j * dimI + i) * 4;

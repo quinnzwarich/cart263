@@ -64,8 +64,8 @@ function setup() {
   // position canvas above text
   cnv = createCanvas(1020, 405);
   cnv.parent("canvas");
-  assessRateMorrison();
-  assessRateReed();
+  // determine rates
+  assessRate();
   // render the title screen
   renderTitle1();
   renderTitle2();
@@ -80,26 +80,17 @@ function draw() {
   display();
 }
 
-function assessRateMorrison() {
-  let mLength = lyricData.verses[morrison.verse][morrison.stanza].morrison.length;
-  let rLength = lyricData.verses[reed.verse][reed.stanza].reed.length;
-  // compare the length of each vocalists stanza
-  let mPercent = 100 / mLength;
-  let rPercent = 100 / rLength;
-  let ratio = mPercent / rPercent;
-  // determine sterling's rate in relation to the ratio
-  morrison.rate = 3500 / ratio;
-}
-
-function assessRateReed() {
-  let mLength = lyricData.verses[morrison.verse][morrison.stanza].morrison.length;
-  let rLength = lyricData.verses[reed.verse][reed.stanza].reed.length;
-  // compare the length of each vocalists stanza
-  let mPercent = 100 / mLength;
-  let rPercent = 100 / rLength;
-  let ratio = mPercent / rPercent;
-  // determine lou's rate in relation to sterling's
-  reed.rate = morrison.rate / ratio;
+function assessRate() {
+  // How fast should the slowest lyric be
+  let baseRate = 10000;
+  // Get references to the arrays of the current lyric
+  let morrisonLyric = lyricData.verses[morrison.verse][morrison.stanza].morrison.length;
+  let reedLyric = lyricData.verses[reed.verse][reed.stanza].reed.length;
+  // Get the length of the longest set of lyrics
+  let maxLength = Math.max(morrisonLyric, reedLyric);
+  // Get the rates
+  reed.rate = baseRate * morrisonLyric / maxLength;
+  morrison.rate = baseRate * reedLyric / maxLength;
 }
 
 // I initially made these timers into functions thinking they would allow for more control over the rate
@@ -121,7 +112,7 @@ function sequenceMorrison() {
     if (morrison.index >=
     lyricData.verses[morrison.verse][morrison.stanza].morrison.length) {
       // advance through stanzas and recalculate the rate
-      assessRateMorrison();
+      assessRate();
       morrison.index = 0;
       morrison.stanza++;
       if (morrison.stanza >= lyricData.verses[morrison.verse].length) {
@@ -146,7 +137,7 @@ function sequenceReed() {
      if (reed.index >=
       lyricData.verses[reed.verse][reed.stanza].reed.length) {
       // advance through stanzas and recalculate the rate
-      assessRateReed();
+      assessRate();
       reed.index = 0;
       reed.stanza++;
       if (reed.stanza >= lyricData.verses[reed.verse].length) {
@@ -390,6 +381,7 @@ function renderTitle2() {
 
 function keyPressed() {
   if (user) {
+    // start timers
     startMorrison();
     startReed();
     // get rid of the title completely
@@ -397,11 +389,9 @@ function keyPressed() {
     morrison.values.length = 0;
     morrison.xCoords.length = 0;
     morrison.yCoords.length = 0;
-    morrison.images.shift();
     reed.values.length = 0;
     reed.xCoords.length = 0;
     reed.yCoords.length = 0;
-    reed.images.shift();
     // ensure that the timers are only called once
     user = false;
   }

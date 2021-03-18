@@ -30,26 +30,26 @@ line3P.addEventListener(`click`, lineClicked);
 function generateFiveSyllableLine() {
   // generate first word
   let firstWord = RiTa.randomWord({
-    numSyllables: getRandomInt(4)
+    numSyllables: getRandomInt(5)
   }); let firstResult = RiTa.analyze(firstWord);
   // number of slashes plus one will give syllable count
   let firstSyllables = firstResult.syllables.split("/").length;
   // 1st digit is 1
   if (firstSyllables === 1) {
     let secondWord = RiTa.randomWord({
-      numSyllables: getRandomInt(4)
+      numSyllables: getRandomInt(5)
     }); let secondResult = RiTa.analyze(secondWord);
     let secondSyllables = secondResult.syllables.split("/").length;
 
     if (secondSyllables === 1) {
       let thirdWord = RiTa.randomWord({
-        numSyllables: getRandomInt(3)
+        numSyllables: getRandomInt(4)
       }); let thirdResult = RiTa.analyze(thirdWord);
       let thirdSyllables = thirdResult.syllables.split("/").length;
 
       if (thirdSyllables === 1) {
         let fourthWord = RiTa.randomWord({
-          numSyllables: getRandomInt(2)
+          numSyllables: getRandomInt(3)
         }); let fourthResult = RiTa.analyze(fourthWord);
         let fourthSyllables = fourthResult.syllables.split("/").length;
 
@@ -75,7 +75,7 @@ function generateFiveSyllableLine() {
     } // 2nd digit is 2
     else if (secondSyllables === 2) {
       let thirdWord = RiTa.randomWord({
-        numSyllables: getRandomInt(2)
+        numSyllables: getRandomInt(3)
       }); let thirdResult = RiTa.analyze(thirdWord);
       let thirdSyllables = thirdResult.syllables.split("/").length;
 
@@ -102,13 +102,13 @@ function generateFiveSyllableLine() {
   // 1st digit is 2
   if (firstSyllables === 2) {
     let secondWord = RiTa.randomWord({
-      numSyllables: getRandomInt(3)
+      numSyllables: getRandomInt(4)
     }); let secondResult = RiTa.analyze(secondWord);
     let secondSyllables = secondResult.syllables.split("/").length;
 
     if (secondSyllables === 1) {
       let thirdWord = RiTa.randomWord({
-        numSyllables: getRandomInt(2)
+        numSyllables: getRandomInt(3)
       }); let thirdResult = RiTa.analyze(thirdWord);
       let thirdSyllables = thirdResult.syllables.split("/").length;
 
@@ -129,13 +129,13 @@ function generateFiveSyllableLine() {
       return firstWord.concat(space, secondWord, space, thirdWord);
     }
     else if (secondSyllables === 3) {
-      firstWord.concat(space, secondWord);
+      return firstWord.concat(space, secondWord);
     }
   }
   // 1st digit is 3
   if (firstSyllables === 3) {
     let secondWord = RiTa.randomWord({
-      numSyllables: getRandomInt(2)
+      numSyllables: getRandomInt(3)
     }); let secondResult = RiTa.analyze(secondWord);
     let secondSyllables = secondResult.syllables.split("/").length;
 
@@ -218,6 +218,7 @@ function setNewLine(element) {
 }
 
 // gripped from mozilla docs
+// input will always be at least one less than the max
 function getRandomInt(max) {
   return Math.floor(Math.random() * (max - 1) + 1);
 }

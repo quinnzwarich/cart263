@@ -2,7 +2,15 @@
   font-family: monospace;
   font-size: 1.33rem;
   width: 50vw;
-  margin: auto;
+  display: flex;
+}
+
+#title {
+  color: white;
+  font-family: cursive;
+  font-size: 2rem;
+  left: 3.33rem;
+  position: absolute;
 }
 
 .redacted {

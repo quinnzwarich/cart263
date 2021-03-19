@@ -5,6 +5,8 @@ body {
   background-color: crimson;
 }
 
+/* I learned how to colour text with a gif through this video: */
+/* https://www.youtube.com/watch?v=2ZaqhK98Aeg&ab_channel=AnnaLytical */
 #title {
   background: url("https://media.giphy.com/media/10rtoKqcDukJgc/giphy.gif");
   -webkit-background-clip: text;

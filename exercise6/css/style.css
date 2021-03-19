@@ -1,24 +1,40 @@
-#secret-document {
-  font-family: monospace;
-  font-size: 1.33rem;
-  width: 50vw;
-  display: flex;
+body {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  background-color: crimson;
 }
 
 #title {
-  color: white;
+  background: url("https://media.giphy.com/media/10rtoKqcDukJgc/giphy.gif");
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-family: cursive;
-  font-size: 2rem;
-  left: 3.33rem;
+  font-size: 5rem;
   position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.redacted {
-  background-color: black;
-  user-select: none;
+#secret-document {
+  font-family: cursive;
+  width: 720px;
+  display: grid;
+  grid-template-columns: 33% 67%;
+  font-size: 1.33rem;
+  background: black;
+  color: white;
 }
 
-.revealed {
-  color: red;
-  text-decoration: underline;
+#thank-you {
+  font-family: cursive;
+  font-size: 1.33rem;
+  background: black;
+  color: white;
+  text-align: center;
+}
+
+span {
+  background-color: crimson;
 }

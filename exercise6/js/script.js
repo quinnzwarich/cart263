@@ -1,29 +1,31 @@
 /**
-Title of Project
-Author Name
+MY Immortal
+Quinn Zwarich
 
-This is a template. You must fill in the title,
-author, and this description to match your project!
+Help Ebony Dark’ness Dementia Raven Way edit their horrendous fanfiction.
 */
 
 "use strict";
 
-$(`.top-secret`).on(`click`, redact);
-setInterval(revelation, 500);
+// insert a span encompassing selection
+// solution found here:
+// https://stackoverflow.com/questions/24690357/add-tags-around-selected-text-in-an-element
+$("#main-text").mouseup(function() {
+    let selection = document.getSelection();
+    let selectionText = selection.toString();
 
-function redact(event) {
-  $(this).removeClass(`revealed`);
-  $(this).addClass(`redacted`);
-}
+    let span = document.createElement("span");
+    span.textContent = selectionText;
 
-function revelation() {
-  $('.redacted').each(attemptReveal);
-}
+    let range = selection.getRangeAt(0);
+    range.deleteContents();
+    range.insertNode(span);
+});
 
-function attemptReveal() {
-  let r = Math.random();
-  if (r < 0.1) {
-    $(this).removeClass(`redacted`);
-    $(this).addClass(`revealed`);
-  }
-}
+// if the user submits their revision,
+// they will be thanked for their contribution
+$("#submit-revision").on("click", function() {
+  $("#about-me").remove();
+  $("#main-text").remove();
+  $("body").append('<p id="thank-you">thanks for da help ^_^</p>');
+})

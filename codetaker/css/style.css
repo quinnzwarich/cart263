@@ -1,0 +1,22 @@
+body {
+  display: grid;
+  align-content: center;
+  justify-content: center;
+}
+
+#poem {
+  font-size: 1.2rem;
+}
+
+#answer {
+  width: 12.5rem;
+  height: 2rem;
+  border: 1px dashed black;
+  display: grid;
+  align-content: center;
+  justify-content: center;
+}
+
+.found {
+  color: red;
+}

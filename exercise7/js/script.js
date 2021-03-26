@@ -18,7 +18,14 @@ $(`#solved-dialog`).dialog({
   }
 });
 
-$(`.secret`).one(`mouseover`, wave(event, 1, 0));
+$(`.secret`).one(`mouseover`, function(event) {
+  $(this).addClass(`found`, 500);
+  let position = $(this).offset(); console.log(position);
+  let radius = 2;
+  let numPoints = 1;
+
+
+});
 
 $(`#answer`).droppable({
   drop: function(event, ui) {
@@ -33,10 +40,7 @@ $(`#answer`).droppable({
   }
 });
 
-function wave(event, radius, numPoints) {
-  $(this).addClass(`found`, 500);
-  let position = $(this).offset();
-
+function wave() {
   radius++;
   if (Number.isInteger(radius / 2)) {
     numPoints = radius / 2;
@@ -45,14 +49,12 @@ function wave(event, radius, numPoints) {
   for (let i = 0; i < (Math.PI * 2); i += angle) {
     let sx = position.top + Math.cos(i) * radius;
     let sy = position.left + Math.sin(i) * radius;
-    $(this).append(`${string}`).offset({
+    $(this).clone().appendTo(`.found`).offset({
       top: sx,
       left: sy
     });
   }
   if (radius < 250) {
-    requestAnimationFrame(function() {
-      wave(event, radius, numPoints);
-    });
+
   }
 }

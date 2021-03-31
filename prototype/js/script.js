@@ -1,15 +1,23 @@
 /**************************************************
-Template p5 project
-Pippin Barr
+project 2 proposal
+Quinn Zwarich
 
-Here is a description of this template p5 project.
+I only got as far as making the model of the pencil,
+I wanted to implement a mechanism to actually unfold it to
+reveal an image inside but I haven't much luck yet in this regard.
 **************************************************/
 
 let regularHex = [];
 let smallerHex = [];
 let pencilBody = [];
+let alphas = [];
+
 let radius = 18;
 let segments = 10;
+
+let peelFinished = false;
+
+let index;
 
 function setup() {
   createCanvas(500, 500, WEBGL);
@@ -21,6 +29,10 @@ function setup() {
   for (let i = 0; i < segments; i++) {
     polygon(0, 0, i * 33, radius, 6, pencilBody);
   }
+  for (let i = 0; i < pencilBody.length; i++) {
+    let alpha = 255;
+    alphas.push(alpha);
+  } index = alphas.length;
 }
 
 
@@ -82,7 +94,7 @@ function middle() {
     if (i < 56) {
       // body of pencil ?
       push();
-      fill(237, 145, 33);
+      fill(237, 145, 33, alphas[i]);
       noStroke();
       beginShape();
       vertex(coords1.x, coords1.y, coords1.z);
@@ -95,7 +107,7 @@ function middle() {
     else {
       // metal part
       push();
-      fill(192);
+      fill(192, 192, 192, alphas[i]);
       noStroke();
       beginShape();
       vertex(coords1.x, coords1.y, coords1.z);
@@ -117,6 +129,19 @@ function eraser() {
   pop();
 }
 
-function unravel() {
-
-}
+// function keyPressed() {
+//   peel(alphas[index]);
+// }
+//
+// function peel(alpha) {
+//   alpha--;
+//   alpha = alphas[index];
+//   if (alpha > 0) {
+//     requestAnimationFrame(function() {
+//       peel(alpha);
+//     });
+//   }
+//   else {
+//     index--;
+//   }
+// }

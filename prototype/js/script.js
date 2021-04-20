@@ -7,141 +7,76 @@ I wanted to implement a mechanism to actually unfold it to
 reveal an image inside but I haven't much luck yet in this regard.
 **************************************************/
 
-let regularHex = [];
-let smallerHex = [];
-let pencilBody = [];
-let alphas = [];
+const grid = [];
+const xCoords = [];
+const yCoords = [];
+const flock = [];
 
-let radius = 18;
-let segments = 10;
+const columns = 10;
+const rows = 10;
+const unit = 50;
 
-let peelFinished = false;
+let xOff = 0;
+let yOff = 0;
+let movement = 0;
 
-let index;
+let user;
 
 function setup() {
-  createCanvas(500, 500, WEBGL);
-  // end of pencil
-  polygon(0, 0, 0, radius, 6, regularHex);
-  // graphite tip
-  polygon(0, 0, -33, radius/3, 6, smallerHex);
-  // body of pencil ?
-  for (let i = 0; i < segments; i++) {
-    polygon(0, 0, i * 33, radius, 6, pencilBody);
-  }
-  for (let i = 0; i < pencilBody.length; i++) {
-    let alpha = 255;
-    alphas.push(alpha);
-  } index = alphas.length;
-}
+  createCanvas(1000, 1000, WEBGL);
 
+  // thruForest();
+  // setInterval(thruForest, 500);
+
+  user = createVector(0, 0);
+
+  for (let i = 0; i < 2; i++) {
+    let x = width/2;
+    let y = height - 50;
+    flock.push(new Boid(x, y));
+  }
+}
 
 function draw() {
-  background(250);
-  orbitControl();
+  background(255);
+  translate(-width/2, -height/2);
 
-  translate(0, height/4, 0);
-  rotateX(PI/2);
-  bottom();
-  middle();
-  eraser();
-}
+  user = createVector(mouseX, mouseY);
 
-function polygon(x, y, z, radius, npoints, array) {
-  let angle = 2 * PI / npoints;
-  for (let i = 0; i < 2 * PI; i += angle) {
-    let coordinates = createVector(x + cos(i) * radius, y + sin(i) * radius, z);
-    array.push(coordinates);
+  for (let boid of flock) {
+    boid.edges();
+    boid.viewBorders();
+    boid.flock(flock, user);
+    boid.update();
+    boid.show();
   }
 }
 
-function bottom() {
-  for (let i = 0; i < regularHex.length - 1; i++) {
-    let coords1 = regularHex[i];
-    let coords2 = regularHex[i + 1];
-    let coords3 = smallerHex[i + 1];
-    let coords4 = smallerHex[i];
-    // end of the pencil
-    push();
-    fill(244, 226, 198);
-    noStroke();
-    beginShape();
-    vertex(coords1.x, coords1.y, coords1.z);
-    vertex(coords2.x, coords2.y, coords2.z);
-    vertex(coords3.x, coords3.y, coords3.z);
-    vertex(coords4.x, coords4.y, coords4.z);
-    endShape(CLOSE);
-    pop();
-    // graphite tip
-    push();
-    fill(32);
-    noStroke();
-    beginShape();
-    vertex(coords3.x, coords3.y, coords3.z);
-    vertex(coords4.x, coords4.y, coords4.z);
-    vertex(0, 0, -54);
-    endShape(CLOSE);
-    pop();
-  }
-}
-
-function middle() {
-  for (let i = 0; i < pencilBody.length - 7; i++) {
-    let coords1 = pencilBody[i];
-    let coords2 = pencilBody[i + 1];
-    let coords3 = pencilBody[i + 7];
-    let coords4 = pencilBody[i + 6];
-    if (i < 56) {
-      // body of pencil ?
-      push();
-      fill(237, 145, 33, alphas[i]);
-      noStroke();
-      beginShape();
-      vertex(coords1.x, coords1.y, coords1.z);
-      vertex(coords2.x, coords2.y, coords2.z);
-      vertex(coords3.x, coords3.y, coords3.z);
-      vertex(coords4.x, coords4.y, coords4.z);
-      endShape(CLOSE);
-      pop();
+function thruForest() {
+  // clear old coordinates
+  xCoords.length = 0;
+  yCoords.length = 0;
+  // generate new coordinates
+  for (let i = 0; i < rows; i++) {
+    grid[i] = [];
+    for (let j = 0; j < columns; j++) {
+      grid[i][j] = noise(xOff, yOff);
+      if (grid[i][j] > 0.7) {
+        let x = i * unit + unit/2;
+        let y = j * unit + unit/2
+        xCoords.push(x);
+        yCoords.push(y);
+      }
+      xOff += 0.618;
     }
-    else {
-      // metal part
-      push();
-      fill(192, 192, 192, alphas[i]);
-      noStroke();
-      beginShape();
-      vertex(coords1.x, coords1.y, coords1.z);
-      vertex(coords2.x, coords2.y, coords2.z);
-      vertex(coords3.x, coords3.y, coords3.z);
-      vertex(coords4.x, coords4.y, coords4.z);
-      endShape(CLOSE);
-      pop();
-    }
+    yOff += 0.618;
   }
 }
 
-function eraser() {
-  push();
-  noStroke();
-  fill(255, 182, 193);
-  translate(0, 0, 290);
-  sphere(15);
-  pop();
+function drawForest() {
+  for (let i = 0; i < xCoords.length; i++) {
+    let x = xCoords[i];
+    let y = yCoords[i];
+    ellipse(x, y, unit/2);
+  }
 }
-
-// function keyPressed() {
-//   peel(alphas[index]);
-// }
-//
-// function peel(alpha) {
-//   alpha--;
-//   alpha = alphas[index];
-//   if (alpha > 0) {
-//     requestAnimationFrame(function() {
-//       peel(alpha);
-//     });
-//   }
-//   else {
-//     index--;
-//   }
-// }

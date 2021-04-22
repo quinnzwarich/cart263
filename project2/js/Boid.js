@@ -2,7 +2,7 @@ class Boid {
   constructor(x, y) {
     this.position = createVector(x, y);
     this.velocity = createVector(0, -1);
-    this.velocity.setMag(random(1.5, 2.5 ));
+    // this.velocity.setMag(random(1.5, 2.5 ));
     this.acceleration = createVector();
     this.maxForce = 0.05;
     this.maxSpeed = 3;
@@ -175,34 +175,34 @@ class Boid {
     return steer;
   }
 
-  viewBorders() {
-    let leftWall = createVector(0, 0);
-    let rightWall = createVector(width, 0);
-
-    let leftBorderWithinFOV = collideLinePoly(
-      0,
-      height,
-      0,
-      0,
-      this.fovArray
-    );
-
-    let rightBorderWithinFOV = collideLinePoly(
-      width,
-      height,
-      width,
-      0,
-      this.fovArray
-    );
-
-    if (leftBorderWithinFOV) {
-      -this.acceleration.x;
-    }
-
-    else if (rightBorderWithinFOV) {
-      -this.acceleration.x;
-    }
-  }
+  // viewBorders() {
+  //   let leftWall = createVector(0, 0);
+  //   let rightWall = createVector(width, 0);
+  //
+  //   let leftBorderWithinFOV = collideLinePoly(
+  //     0,
+  //     height,
+  //     0,
+  //     0,
+  //     this.fovArray
+  //   );
+  //
+  //   let rightBorderWithinFOV = collideLinePoly(
+  //     width,
+  //     height,
+  //     width,
+  //     0,
+  //     this.fovArray
+  //   );
+  //
+  //   if (leftBorderWithinFOV) {
+  //     -this.acceleration.x;
+  //   }
+  //
+  //   else if (rightBorderWithinFOV) {
+  //     -this.acceleration.x;
+  //   }
+  // }
 
   applyForce(force) {
     this.acceleration.add(force);

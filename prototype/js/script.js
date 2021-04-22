@@ -20,19 +20,20 @@ let xOff = 0;
 let yOff = 0;
 let movement = 0;
 
-let user;
+let cam;
 
 function setup() {
-  createCanvas(1000, 1000, WEBGL);
+  createCanvas(640, 480, WEBGL);
 
   // thruForest();
   // setInterval(thruForest, 500);
 
-  user = createVector(0, 0);
+  user = createVector(width/2, height/2);
+  cam = createCamera();
 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 3; i++) {
     let x = width/2;
-    let y = height - 50;
+    let y = height/2;
     flock.push(new Boid(x, y));
   }
 }
@@ -41,15 +42,31 @@ function draw() {
   background(255);
   translate(-width/2, -height/2);
 
-  user = createVector(mouseX, mouseY);
+  console.log(centerOfBoids());
+
+  let cameraPos = centerOfBoids();
+  cam.setPosition(cameraPos.x, cameraPos.y, cameraPos.z);
+  // console.log(cameraPos);
 
   for (let boid of flock) {
-    boid.edges();
+    // boid.edges();
     boid.viewBorders();
-    boid.flock(flock, user);
+    boid.flock(flock);
     boid.update();
     boid.show();
   }
+}
+
+function centerOfBoids() {
+  let centerPos = createVector(0, 0);
+
+  for (let i = 0; i < flock.length; i++) {
+    let boid = flock[i];
+    centerPos.add(boid.position);
+  }
+  centerPos.div(flock.length);
+  centerPos.z = (height/2.0) / tan(PI*30.0 / 180.0);
+  return centerPos;
 }
 
 function thruForest() {

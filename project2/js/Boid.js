@@ -25,16 +25,21 @@ class Boid {
   }
 
   edges() {
+    // console.log("edges()")
     if (this.position.x < -this.radius) {
+      console.log(`off left: ${this.position.x}, ${this.radius}`)
       this.position.x = width + this.radius;
     }
-    if (this.position.y < -this.radius) {
+    else if (this.position.y < -this.radius) {
+      console.log("off top")
       this.position.y = height + this.radius;
     }
-    if (this.position.x > width + this.radius) {
+    else if (this.position.x > width + this.radius) {
+      console.log("off right")
       this.position.x = -this.radius;
     }
-    if (this.position.y > height + this.radius) {
+    else if (this.position.y > height + this.radius) {
+      console.log("off bottom")
       this.position.y = -this.radius;
     }
   }
@@ -125,55 +130,110 @@ class Boid {
     return steer;
   }
 
+  // viewGeese(boids) {
+  //   let count = 0;
+  //   let steer = createVector(0, 0);
+  //
+  //   for (let i = 0; i < boids.length; i++) {
+  //     if (boids[i] === this) {
+  //       continue;
+  //       console.log(`true`);
+  //     }
+  //
+  //     let boidWithinFOV = collidePointTriangle(
+  //       boids[i].position.x,
+  //       boids[i].position.y,
+  //       this.position.x,
+  //       this.position.y,
+  //       this.fovCCW.x,
+  //       this.fovCCW.y,
+  //       this.fovCW.x,
+  //       this.fovCW.y
+  //     );
+  //
+  //     let currentHorizontalAxis = this.position.rotate(PI);
+  //     let otherHorizontalAxis = boids[i].position.rotate(PI);
+  //
+  //     if (boidWithinFOV && currentHorizontalAxis < otherHorizontalAxis) {
+  //       let perpendicular = p5.Vector.dot(this.position, boids[i].position);
+  //       steer.add(-perpendicular);
+  //       count++;
+  //     }
+  //
+  //     else if (boidWithinFOV && currentHorizontalAxis > otherHorizontalAxis) {
+  //       let perpendicular = p5.Vector.dot(this.position, boids[i].position);
+  //       steer.add(perpendicular);
+  //       count++;
+  //     }
+  //   }
+  //
+  //   if (count > 0) {
+  //     steer.div(count);
+  //   }
+  //
+  //   if (steer.mag() > 0) {
+  //     steer.normalize();
+  //     steer.mult(this.maxSpeed);
+  //     steer.sub(this.velocity);
+  //     steer.limit(this.maxForce);
+  //   }
+  //   return steer;
+  // }
+
   viewGeese(boids) {
-    let count = 0;
-    let steer = createVector(0, 0);
+   let count = 0;
+   let steer = createVector(0, 0);
 
-    for (let i = 0; i < boids.length; i++) {
-      if (boids[i] === this) {
-        continue;
-        console.log(`true`);
-      }
+   for (let i = 0; i < boids.length; i++) {
+     let other = boids[i];
+     if (other === this) {
+       // console.log("It's a me")
+       continue;
+       // console.log(`true`);
+     }
+ 
+     let boidWithinFOV = collidePointTriangle(
+       other.position.x,
+       other.position.y,
+       this.position.x,
+       this.position.y,
+       this.fovCCW.x,
+       this.fovCCW.y,
+       this.fovCW.x,
+       this.fovCW.y
+     );
 
-      let boidWithinFOV = collidePointTriangle(
-        boids[i].position.x,
-        boids[i].position.y,
-        this.position.x,
-        this.position.y,
-        this.fovCCW.x,
-        this.fovCCW.y,
-        this.fovCW.x,
-        this.fovCW.y
-      );
+     // if (boidWithinFOV) console.log("I see a boid!")
 
-      let currentHorizontalAxis = this.position.rotate(PI);
-      let otherHorizontalAxis = boids[i].position.rotate(PI);
+     let currentHorizontalAxis = this.position.rotate(PI);
+     let otherHorizontalAxis = other.position.rotate(PI);
 
-      if (boidWithinFOV && currentHorizontalAxis < otherHorizontalAxis) {
-        let perpendicular = p5.Vector.dot(this.position, boids[i].position);
-        steer.add(-perpendicular);
-        count++;
-      }
+     if (boidWithinFOV) {// && currentHorizontalAxis < otherHorizontalAxis) {
+       // let perpendicular = p5.Vector.cross(this.position, boids[i].position);
+       let difference = p5.Vector.sub(other.position, this.position);
+       steer.add(difference);
+       count++;
+     }
 
-      else if (boidWithinFOV && currentHorizontalAxis > otherHorizontalAxis) {
-        let perpendicular = p5.Vector.dot(this.position, boids[i].position);
-        steer.add(perpendicular);
-        count++;
-      }
-    }
+     else if (boidWithinFOV && currentHorizontalAxis > otherHorizontalAxis) {
+       let perpendicular = p5.Vector.cross(this.position, boids[i].position);
+       steer.add(perpendicular);
+       count++;
+     }
+   }
 
-    if (count > 0) {
-      steer.div(count);
-    }
+   if (count > 0) {
+     steer.div(count);
+   }
 
-    if (steer.mag() > 0) {
-      steer.normalize();
-      steer.mult(this.maxSpeed);
-      steer.sub(this.velocity);
-      steer.limit(this.maxForce);
-    }
-    return steer;
-  }
+   if (steer.mag() > 0) {
+     steer.normalize();
+     steer.mult(this.maxSpeed);
+     steer.sub(this.velocity);
+     steer.limit(this.maxForce);
+   }
+   return steer;
+ }
 
   // viewBorders() {
   //   let leftWall = createVector(0, 0);

@@ -7,25 +7,29 @@ class Intro extends Phaser.Scene {
       text: undefined,
       toggle: true,
       numFrames: 7,
-      id: 0
+      id: 0,
+      sound: undefined
     };
     this.line1 = {
       text: undefined,
       toggle: false,
       numFrames: 8,
-      id: 1
+      id: 1,
+      sound: undefined
     };
     this.line2 = {
       text: undefined,
       toggle: false,
       numFrames: 9,
-      id: 2
+      id: 2,
+      sound: undefined
     };
     this.line3 = {
       text: undefined,
       toggle: false,
       numFrames: 13,
-      id: 3
+      id: 3,
+      sound: undefined
     };
   }
 
@@ -42,6 +46,8 @@ class Intro extends Phaser.Scene {
     });
     line.text.play(`intro-line-${line.id}-sheet`);
     line.text.visible = line.toggle;
+    // initialize corresponsind sound
+    line.sound = this.sound.add(`intro-sound-${line.id}`);
   }
 
   create() {
@@ -64,6 +70,10 @@ class Intro extends Phaser.Scene {
   proceedToNextLine(prevLine, currLine) {
   	if (!prevLine.text.anims.isPlaying && prevLine.toggle) {
   		this.input.on(`pointerup`, () => {
+        // play sound
+        currLine.sound.play();
+        // mute previous sound
+        prevLine.sound.setMute(true);
   			// hide the previous line
   			prevLine.text.visible = false;
   			// animate the current line
@@ -80,6 +90,9 @@ class Intro extends Phaser.Scene {
   transition(prevLine) {
   	if (!prevLine.text.anims.isPlaying && prevLine.toggle) {
   		this.input.on(`pointerup`, () => {
+        // mute last sound
+        prevLine.sound.setMute(true);
+        // go to next scene
   			this.scene.start(`options`);
   		});
   	}

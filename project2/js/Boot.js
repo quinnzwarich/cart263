@@ -142,8 +142,16 @@ class Boot extends Phaser.Scene {
     this.load.image(`pencil-6`, `assets/images/pencil6.png`);
     this.load.image(`pencil-7`, `assets/images/pencil7.png`);
 
+    // load title audio
+    this.load.audio(`title-drone`, `assets/sounds/maintheme.wav`);
+    // load intro audio
+    this.load.audio(`intro-sound-0`, `assets/sounds/hushedclass.wav`);
+    this.load.audio(`intro-sound-1`, `assets/sounds/chalk0.wav`);
+    this.load.audio(`intro-sound-2`, `assets/sounds/chalk1.wav`);
+    this.load.audio(`intro-sound-3`, `assets/sounds/pencildrop.wav`);
+
     this.load.on(`complete`, () => {
-      this.scene.start(`APPLE`);
+      this.scene.start(`warning`);
     });
   }
 

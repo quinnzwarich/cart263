@@ -1,7 +1,7 @@
 class Title extends Phaser.Scene {
   constructor() {
     super({
-      key: `title`,
+      key: `title`
     });
     this.chairsOpacity = 0;
     this.chairzOpacity = 0;
@@ -13,6 +13,8 @@ class Title extends Phaser.Scene {
     this.begin = this.add.image(320, 304, `begin-0`);
     this.begin.setInteractive();
 
+    this.murmur = this.sound.add(`intro-sound-0`);
+
     this.begin.on(`pointerover`, () => {
       this.begin.tint = 0xcccccc;
     });
@@ -20,6 +22,10 @@ class Title extends Phaser.Scene {
       this.begin.clearTint();
     });
     this.begin.on(`pointerup`, () => {
+      // stop theme
+      this.game.sound.stopAll();
+      // play the first sfx
+      this.murmur.play();
       this.scene.start(`intro`);
     });
 

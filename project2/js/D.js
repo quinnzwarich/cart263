@@ -3,6 +3,7 @@ class D extends Phaser.Scene {
     super({
       key: `D`
     });
+    // more configs
     this.line0 = {
       text: undefined,
       toggle: true,
@@ -17,6 +18,7 @@ class D extends Phaser.Scene {
     };
   }
 
+  // configs are then used to initialize each line
   initLine(line) {
     line.text = this.add.sprite(320, 336, `line-D-${line.id}`);
     this.anims.create({
@@ -33,20 +35,22 @@ class D extends Phaser.Scene {
   }
 
   create() {
-    this.default = this.add.image(320, 192, `default`);
-
+    // initalize classroom
+    this.defaultClassroom = this.add.image(320, 192, `default`);
+    // if user has been to every other option,
+    // display line which will take them inside their desk
     if (optionKeys.a && optionKeys.b && optionKeys.c) {
       this.line0.toggle = false;
       this.line1.toggle = true;
-    } else {
+    } else { // if not tell them its stinky
       this.line0.toggle = true;
       this.line1.toggle = false;
-    }
-
+    } // initialize lines
     this.initLine(this.line0);
     this.initLine(this.line1);
   }
 
+  // same deal except take them to the appropriate scene
   update() {
     if (optionKeys.a && optionKeys.b && optionKeys.c) {
       this.transition(this.line1, `APPLE`);
@@ -54,7 +58,7 @@ class D extends Phaser.Scene {
       this.transition(this.line0, `options`);
     }
   }
-
+  
   transition(prevLine, whereTo) {
   	if (!prevLine.text.anims.isPlaying && prevLine.toggle) {
   		this.input.on(`pointerup`, () => {

@@ -1,3 +1,10 @@
+/**
+I know it's a little sad that this went unused but it will be eventually.
+I had the idea to use it to animate the phrase 'do you want to keep going'
+but I feel that I've run out of time to implement to my liking.
+
+Many a regretful decisions have been made. 
+*/
 class Boid {
   constructor(x, y) {
     this.position = createVector(x, y);

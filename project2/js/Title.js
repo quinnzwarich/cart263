@@ -3,18 +3,23 @@ class Title extends Phaser.Scene {
     super({
       key: `title`
     });
+    // these variables control
+    // the alpha for each chair image
     this.chairsOpacity = 0;
     this.chairzOpacity = 0;
   }
 
   create() {
+    // initialize chair images
     this.chairs = this.add.sprite(320, 192, `chairs`);
     this.chairz = this.add.sprite(320, 192, `chairz`);
+    // initialize button
     this.begin = this.add.image(320, 304, `begin-0`);
     this.begin.setInteractive();
-
+    // initialize first sfx
     this.murmur = this.sound.add(`intro-sound-0`);
 
+    // tint the button while hovering
     this.begin.on(`pointerover`, () => {
       this.begin.tint = 0xcccccc;
     });
@@ -29,8 +34,10 @@ class Title extends Phaser.Scene {
       this.scene.start(`intro`);
     });
 
+    // initialize text
     this.titleText = this.add.sprite(320, 192, `title-text`);
 
+    // initialize animations
     this.anims.create({
       key: `chairs-sheet`,
       frames: this.anims.generateFrameNumbers(`chairs`, {
@@ -67,6 +74,11 @@ class Title extends Phaser.Scene {
     this.titleText.play(`title-sheet`);
   }
 
+  /**
+  I am using sin and cos functions to gradually modulate
+  the opacity of each image so that when one fades out, 
+  the other fades in.
+  */
   update() {
     this.chairsOpacity += Math.PI / 100;
     let chairsMod = (Math.sin(this.chairsOpacity) + 1) / 2;

@@ -3,6 +3,7 @@ class B extends Phaser.Scene {
     super({
       key: `B`
     });
+    // more line configs
     this.line0 = {
       text: undefined,
       toggle: true,
@@ -29,6 +30,7 @@ class B extends Phaser.Scene {
     };
   }
 
+  // configs are then used to initialize each line
   initLine(line) {
     line.text = this.add.sprite(320, 336, `line-B-${line.id}`);
     this.anims.create({
@@ -45,8 +47,9 @@ class B extends Phaser.Scene {
   }
 
   create() {
-    this.default = this.add.image(320, 192, `default`);
-
+    // initialize classroom
+    this.defaultClassroom = this.add.image(320, 192, `default`);
+    // initialize lines
     this.initLine(this.line0);
     this.initLine(this.line1);
     this.initLine(this.line2);
@@ -57,7 +60,7 @@ class B extends Phaser.Scene {
     this.proceedToNextLine(this.line0, this.line1);
     this.proceedToNextLine(this.line1, this.line2);
     this.proceedToNextLine(this.line2, this.line3);
-
+    // head back after the fourth line
     this.transition(this.line3);
   }
 

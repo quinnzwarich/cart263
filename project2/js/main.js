@@ -27,9 +27,12 @@ let image = {
 	}
 }
 
-// these will prevent the user from
-// selecting the fourth option too early
-// they need to remain constant through scene transitions
+/**
+These variables are for preventing the user from accessing
+the fourth button before interacting with the other ones.
+I made them global to circumvent the possibility of them
+being cleared with every scene change.
+*/
 let optionKeys = {
 	a: false,
 	b: false,
@@ -45,6 +48,11 @@ let config = {
 };
 
 let game = new Phaser.Game(config);
+
+/**
+All code below this point was used to process all of the images,
+it is mostly leftover from project 1 but modified slightly for each image.
+*/
 
 // function preload() {
 // 	chairs = loadImage(`assets/images/deskline9.png`);

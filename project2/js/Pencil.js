@@ -3,6 +3,7 @@ class Pencil extends Phaser.Scene {
     super({
       key: `PENCIL`
     });
+    // whole lotta configs
     this.lines = [{
       text: undefined,
       toggle: true,
@@ -40,17 +41,24 @@ class Pencil extends Phaser.Scene {
       toggle: false,
       id: 9
     }];
+    // stores the darker
+    // pencil images
     this.pencilFrames = [];
+    // stores the pencil soudns
     this.pencilSounds = [];
+    // used to keep track of
+    // pencil related affairs
     this.index = 1;
   }
 
+  // configs are then used to initialize each line
   initLine(line) {
     line.text = this.add.image(320, 336, `desk-line-${line.id}`);
     line.text.visible = line.toggle;
   }
 
   create() {
+    // initialize colourful pencil animation
     this.pencil = this.add.sprite(320, 192, `pencil`);
     this.anims.create({
       key: `pencil-sheet`,
@@ -65,6 +73,7 @@ class Pencil extends Phaser.Scene {
     this.pencil.play(`pencil-sheet`);
     this.pencil.visible = false;
 
+    // sounds should only start on the second pencil image
     for (let i = 0; i < 8; i++) {
       if (i === 0) {
         // initialize pencil images
@@ -82,9 +91,11 @@ class Pencil extends Phaser.Scene {
       }
     }
 
+    // display the first pencil frame
     let pencil = this.pencilFrames[0];
     pencil.visible = true;
 
+    // initialize lines
     for (let i = 0; i < this.lines.length; i++) {
       let line = this.lines[i];
       this.initLine(line);
@@ -94,7 +105,7 @@ class Pencil extends Phaser.Scene {
       if (this.index < this.pencilFrames.length) {
         // load and play sound
         let scratch = this.pencilSounds[this.index - 1];
-        scratch.play(); 
+        scratch.play();
         // hide previous frame
         let prevPencil = this.pencilFrames[this.index - 1];
         prevPencil.visible = false;
@@ -114,12 +125,12 @@ class Pencil extends Phaser.Scene {
   }
 
   update() {
+    // keep track of which line to display
     for (let i = 0; i < this.lines.length - 1; i++) {
       let prevLine = this.lines[i];
       let currLine = this.lines[i + 1];
       this.proceedToNextLine(prevLine, currLine);
-    }
-
+    } // after the ninth line head to the end
     let finalLine = this.lines[8];
     this.transition(finalLine);
   }

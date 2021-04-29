@@ -3,10 +3,13 @@ class End extends Phaser.Scene {
     super({
       key: `end`
     })
+    // used to control alpha
+    // of the four frames
     this.opacity = 0;
   }
 
   create() {
+    // initialize distorted classrooms
     this.distortedClassroom0 = this.add.sprite(320, 192, `distorted`, 0);
     this.distortedClassroom1 = this.add.sprite(320, 192, `distorted`, 1);
     this.distortedClassroom2 = this.add.sprite(320, 192, `distorted`, 2);
@@ -17,6 +20,8 @@ class End extends Phaser.Scene {
     this.modulate();
   }
 
+  // modulates the opacity of each frame,
+  // like on the title screen
   modulate() {
     this.opacity += Math.PI / 100;
     let mod0 = (Math.sin(this.opacity) + 1) / 2;

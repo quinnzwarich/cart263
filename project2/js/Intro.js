@@ -3,6 +3,8 @@ class Intro extends Phaser.Scene {
     super({
       key: `intro`
     });
+    // these variables are
+    // all line configs
     this.line0 = {
       text: undefined,
       toggle: true,
@@ -33,6 +35,7 @@ class Intro extends Phaser.Scene {
     };
   }
 
+  // configs are then used to initialize each line
   initLine(line) {
     line.text = this.add.sprite(320, 336, `intro-line-${line.id}`);
     this.anims.create({
@@ -46,13 +49,14 @@ class Intro extends Phaser.Scene {
     });
     line.text.play(`intro-line-${line.id}-sheet`);
     line.text.visible = line.toggle;
-    // initialize corresponsind sound
+    // initialize corresponding sound
     line.sound = this.sound.add(`intro-sound-${line.id}`);
   }
 
   create() {
-    this.default = this.add.image(320, 192, `default`);
-
+    // initialize classroom
+    this.defaultClassroom = this.add.image(320, 192, `default`);
+    // initialize next theme
     this.drone = this.sound.add(`options-drone`);
 
     this.initLine(this.line0);
@@ -65,7 +69,7 @@ class Intro extends Phaser.Scene {
     this.proceedToNextLine(this.line0, this.line1);
     this.proceedToNextLine(this.line1, this.line2);
     this.proceedToNextLine(this.line2, this.line3);
-
+    // go to the next scene after the fourth line
     this.transition(this.line3);
   }
 
@@ -94,7 +98,7 @@ class Intro extends Phaser.Scene {
   		this.input.on(`pointerup`, () => {
         // mute last sound
         prevLine.sound.setMute(true);
-        // prepare next theme
+        // play next theme
         this.drone.play();
         this.drone.setLoop(true);
         // go to next scene

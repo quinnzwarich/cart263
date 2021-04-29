@@ -164,12 +164,4 @@ class Boot extends Phaser.Scene {
       this.scene.start(`warning`);
     });
   }
-
-  create() {
-
-  }
-
-  update() {
-
-  }
 }

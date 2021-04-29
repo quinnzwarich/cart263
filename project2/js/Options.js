@@ -3,6 +3,8 @@ class Options extends Phaser.Scene {
     super({
       key: `options`
     });
+    // these variables are
+    // all button configs
     this.a = {
       button: undefined,
       destination: `A`,
@@ -22,13 +24,13 @@ class Options extends Phaser.Scene {
   }
 
   create() {
-    this.default = this.add.image(320, 192, `default`);
-
+    // initialize classroom
+    this.defaultClassroom = this.add.image(320, 192, `default`);
+    // initialize buttons
     this.a.button = this.add.image(213, 291, `a`);
     this.b.button = this.add.image(426, 291, `b`);
     this.c.button = this.add.image(213, 345, `c`);
     this.d.button = this.add.image(426, 345, `d`);
-
     this.c.button.setInteractive();
     this.b.button.setInteractive();
     this.a.button.setInteractive();
@@ -43,13 +45,13 @@ class Options extends Phaser.Scene {
   }
 
   interactWithButton(option) {
-    // add a tint
+    // add a tint while hovering
     option.button.on(`pointerover`, () => {
       option.button.tint = 0xcccccc;
-    }); // remove the tint
+    }); // remove while not
     option.button.on(`pointerout`, () => {
       option.button.clearTint();
-    }); // transport to appropriate scene
+    }); // go to appropriate scene
     option.button.on(`pointerup`, () => {
       this.scene.start(option.destination);
     });

@@ -1,6 +1,15 @@
-/*********************************************
+html, body {
+  height: 100%;
+  background-color: black;
+}
 
-Here is a description of any special CSS used.
-By default that's nothing.
+body {
+  margin: 0;
+  display: flex;
 
-**********************************************/
+  /* This centers our sketch horizontally. */
+  justify-content: center;
+
+  /* This centers our sketch vertically. */
+  align-items: center;
+}

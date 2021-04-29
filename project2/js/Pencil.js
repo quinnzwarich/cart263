@@ -41,6 +41,7 @@ class Pencil extends Phaser.Scene {
       id: 9
     }];
     this.pencilFrames = [];
+    this.pencilSounds = [];
     this.index = 1;
   }
 
@@ -65,9 +66,20 @@ class Pencil extends Phaser.Scene {
     this.pencil.visible = false;
 
     for (let i = 0; i < 8; i++) {
-      let pencil = this.add.image(320, 192, `pencil-${i}`);
-      pencil.visible = false;
-      this.pencilFrames.push(pencil);
+      if (i === 0) {
+        // initialize pencil images
+        let pencil = this.add.image(320, 192, `pencil-${i}`);
+        pencil.visible = false;
+        this.pencilFrames.push(pencil);
+      } else {
+        // initialize pencil sounds
+        let scratch = this.sound.add(`scratch-${i - 1}`);
+        this.pencilSounds.push(scratch);
+        // initialize pencil images
+        let pencil = this.add.image(320, 192, `pencil-${i}`);
+        pencil.visible = false;
+        this.pencilFrames.push(pencil);
+      }
     }
 
     let pencil = this.pencilFrames[0];
@@ -80,6 +92,9 @@ class Pencil extends Phaser.Scene {
 
     this.input.on(`pointerup`, () => {
       if (this.index < this.pencilFrames.length) {
+        // load and play sound
+        let scratch = this.pencilSounds[this.index - 1];
+        scratch.play(); 
         // hide previous frame
         let prevPencil = this.pencilFrames[this.index - 1];
         prevPencil.visible = false;

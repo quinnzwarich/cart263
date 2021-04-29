@@ -58,6 +58,8 @@ class D extends Phaser.Scene {
   transition(prevLine, whereTo) {
   	if (!prevLine.text.anims.isPlaying && prevLine.toggle) {
   		this.input.on(`pointerup`, () => {
+        // stop theme
+        this.game.sound.stopAll();
         // reset the toggles
         this.line0.toggle = true;
         this.line1.toggle = false;

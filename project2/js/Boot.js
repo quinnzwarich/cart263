@@ -149,6 +149,16 @@ class Boot extends Phaser.Scene {
     this.load.audio(`intro-sound-1`, `assets/sounds/chalk0.wav`);
     this.load.audio(`intro-sound-2`, `assets/sounds/chalk1.wav`);
     this.load.audio(`intro-sound-3`, `assets/sounds/pencildrop.wav`);
+    // load options audio
+    this.load.audio(`options-drone`, `assets/sounds/optionstheme.wav`);
+    // load pencil audio
+    this.load.audio(`scratch-0`, `assets/sounds/ferrule0.wav`);
+    this.load.audio(`scratch-1`, `assets/sounds/ferrule1.wav`);
+    this.load.audio(`scratch-2`, `assets/sounds/ferrule2.wav`);
+    this.load.audio(`scratch-3`, `assets/sounds/ferrule3.wav`);
+    this.load.audio(`scratch-4`, `assets/sounds/ferrule4.wav`);
+    this.load.audio(`scratch-5`, `assets/sounds/ferrule5.wav`);
+    this.load.audio(`scratch-6`, `assets/sounds/ferrule6.wav`);
 
     this.load.on(`complete`, () => {
       this.scene.start(`warning`);

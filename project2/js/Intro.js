@@ -53,6 +53,8 @@ class Intro extends Phaser.Scene {
   create() {
     this.default = this.add.image(320, 192, `default`);
 
+    this.drone = this.sound.add(`options-drone`);
+
     this.initLine(this.line0);
     this.initLine(this.line1);
     this.initLine(this.line2);
@@ -92,6 +94,9 @@ class Intro extends Phaser.Scene {
   		this.input.on(`pointerup`, () => {
         // mute last sound
         prevLine.sound.setMute(true);
+        // prepare next theme
+        this.drone.play();
+        this.drone.setLoop(true);
         // go to next scene
   			this.scene.start(`options`);
   		});

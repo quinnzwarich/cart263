@@ -94,6 +94,18 @@ class Boot extends Phaser.Scene {
       frameHeight: 80,
       endFrame: 6
     });
+    // load inside-desk spritesheets
+    this.load.spritesheet(`pencil`, `assets/images/pencil-spritesheet.png`, {
+      frameWidth: 640,
+      frameHeight: 384,
+      endFrame: 15
+    });
+    // load end spritesheets
+    this.load.spritesheet(`distorted`, `assets/images/classroom-spritesheet.png`, {
+      frameWidth: 640,
+      frameHeight: 384,
+      endFrame: 3
+    });
 
     // load warning sprites
     this.load.image(`warning-text`, `assets/images/warningtext.png`);
@@ -111,9 +123,27 @@ class Boot extends Phaser.Scene {
     this.load.image(`d`, `assets/images/optionD.png`);
     // load inside-desk sprites
     this.load.image(`apple`, `assets/images/apple.png`);
+    this.load.image(`desk-line-0`, `assets/images/deskline0.png`);
+    this.load.image(`desk-line-1`, `assets/images/deskline1.png`);
+    this.load.image(`desk-line-2`, `assets/images/deskline2.png`);
+    this.load.image(`desk-line-3`, `assets/images/deskline3.png`);
+    this.load.image(`desk-line-4`, `assets/images/deskline4.png`);
+    this.load.image(`desk-line-5`, `assets/images/deskline5.png`);
+    this.load.image(`desk-line-6`, `assets/images/deskline6.png`);
+    this.load.image(`desk-line-7`, `assets/images/deskline7.png`);
+    this.load.image(`desk-line-8`, `assets/images/deskline8.png`);
+    this.load.image(`desk-line-9`, `assets/images/deskline9.png`)
+    this.load.image(`pencil-0`, `assets/images/pencil0.png`);
+    this.load.image(`pencil-1`, `assets/images/pencil1.png`);
+    this.load.image(`pencil-2`, `assets/images/pencil2.png`);
+    this.load.image(`pencil-3`, `assets/images/pencil3.png`);
+    this.load.image(`pencil-4`, `assets/images/pencil4.png`);
+    this.load.image(`pencil-5`, `assets/images/pencil5.png`);
+    this.load.image(`pencil-6`, `assets/images/pencil6.png`);
+    this.load.image(`pencil-7`, `assets/images/pencil7.png`);
 
     this.load.on(`complete`, () => {
-      this.scene.start(`warning`);
+      this.scene.start(`APPLE`);
     });
   }
 

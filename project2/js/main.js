@@ -13,8 +13,8 @@ let cam;
 
 // image processing variables
 let chairs;
-let dimI = 208;
-let dimJ = 48;
+let dimI = 576;
+let dimJ = 80;
 let image = {
 	xCoords: [],
 	yCoords: [],
@@ -41,13 +41,13 @@ let config = {
   type: Phaser.AUTO,
   width: 640,
   height: 384,
-  scene: [Boot, Warning, Title, Intro, Options, A, B, C, D, InsideDesk]
+  scene: [Boot, Warning, Title, Intro, Options, A, B, C, D, Apple, Pencil, End]
 };
 
 let game = new Phaser.Game(config);
 
 // function preload() {
-// 	chairs = loadImage(`assets/images/blankbutton.png`);
+// 	chairs = loadImage(`assets/images/deskline9.png`);
 // }
 //
 // function setup() {
@@ -99,7 +99,7 @@ let game = new Phaser.Game(config);
 //       // display bright coordinates as colourful translucent ellipses
 //       push();
 //       fill(image.colours.r[i], image.colours.g[i], image.colours.b[i], image.values[i]);
-//       ellipse(image.xCoords[i], image.yCoords[i], image.newValues[i]/(image.values[i] * 0.5));
+//       ellipse(image.xCoords[i], image.yCoords[i], image.newValues[i]/(image.values[i] * 0.2));
 //       pop();
 //     } else {
 //       // display dark coordinates as points

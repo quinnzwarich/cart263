@@ -10,17 +10,16 @@ class Title extends Phaser.Scene {
   create() {
     this.chairs = this.add.sprite(320, 192, `chairs`);
     this.chairz = this.add.sprite(320, 192, `chairz`);
-    this.begin1 = this.add.image(320, 304, `begin-1`);
-    this.begin0 = this.add.image(320, 304, `begin-0`);
-    this.begin0.setInteractive();
+    this.begin = this.add.image(320, 304, `begin-0`);
+    this.begin.setInteractive();
 
-    this.begin0.on(`pointerover`, () => {
-      this.begin0.alpha = 0;
+    this.begin.on(`pointerover`, () => {
+      this.begin.tint = 0xcccccc;
     });
-    this.begin0.on(`pointerout`, () => {
-      this.begin0.alpha = 1;
+    this.begin.on(`pointerout`, () => {
+      this.begin.clearTint();
     });
-    this.begin0.on(`pointerup`, () => {
+    this.begin.on(`pointerup`, () => {
       this.scene.start(`intro`);
     });
 
@@ -33,7 +32,8 @@ class Title extends Phaser.Scene {
         end: 8
       }),
       frameRate: 8,
-      repeat: -1
+      repeat: -1,
+      yoyo: true
     });
     this.anims.create({
       key: `chairz-sheet`,
@@ -41,8 +41,9 @@ class Title extends Phaser.Scene {
         start: 0,
         end: 8
       }),
-      frameRate: 13,
-      repeat: -1
+      frameRate: 5,
+      repeat: -1,
+      yoyo: true
     });
     this.anims.create({
       key: `title-sheet`,
@@ -51,7 +52,8 @@ class Title extends Phaser.Scene {
         end: 3
       }),
       frameRate: 1,
-      repeat: -1
+      repeat: -1,
+      yoyo: true
     });
 
     this.chairs.play(`chairs-sheet`);

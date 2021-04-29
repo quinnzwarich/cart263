@@ -7,17 +7,16 @@ class Warning extends Phaser.Scene {
 
   create() {
     this.warningText = this.add.image(320, 192, `warning-text`);
-    this.continue1 = this.add.image(480, 288, `continue-1`);
-    this.continue0 = this.add.image(480, 288, `continue-0`);
-    this.continue0.setInteractive();
+    this.continue = this.add.image(480, 288, `continue-0`);
+    this.continue.setInteractive();
 
-    this.continue0.on(`pointerover`, () => {
-      this.continue0.alpha = 0;
+    this.continue.on(`pointerover`, () => {
+      this.continue.tint = 0xcccccc;
     });
-    this.continue0.on(`pointerout`, () => {
-      this.continue0.alpha = 1;
+    this.continue.on(`pointerout`, () => {
+      this.continue.clearTint();
     });
-    this.continue0.on(`pointerup`, () => {
+    this.continue.on(`pointerup`, () => {
       this.scene.start(`title`);
     });
   }

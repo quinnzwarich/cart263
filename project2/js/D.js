@@ -49,7 +49,7 @@ class D extends Phaser.Scene {
 
   update() {
     if (optionKeys.a && optionKeys.b && optionKeys.c) {
-      this.transition(this.line1, `inside-desk`);
+      this.transition(this.line1, `APPLE`);
     } else {
       this.transition(this.line0, `options`);
     }

@@ -21,7 +21,7 @@ class Title extends Phaser.Scene {
       this.begin0.alpha = 1;
     });
     this.begin0.on(`pointerup`, () => {
-      this.scene.start(`classroom`);
+      this.scene.start(`intro`);
     });
 
     this.titleText = this.add.sprite(320, 192, `title-text`);

@@ -7,9 +7,14 @@ Quinn Zwarich
 
 "use strict";
 
+// boid variables
 let flock = [];
 let cam;
 
+// image processing variables
+let chairs;
+let dimI = 208;
+let dimJ = 48;
 let image = {
 	xCoords: [],
 	yCoords: [],
@@ -21,19 +26,22 @@ let image = {
 		b: []
 	}
 }
-let chairs;
-let dimI = 208;
-let dimJ = 48;
 
-let goose = {
-	direction: `right`
+// these will prevent the user from
+// selecting the fourth option too early
+// they need to remain constant through scene transitions
+let optionKeys = {
+	a: false,
+	b: false,
+	c: false,
 };
 
+// phaser variables
 let config = {
   type: Phaser.AUTO,
   width: 640,
   height: 384,
-  scene: [Boot, Warning, Title, Classroom]
+  scene: [Boot, Warning, Title, Intro, Options, A, B, C, D, InsideDesk]
 };
 
 let game = new Phaser.Game(config);

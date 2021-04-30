@@ -13,7 +13,7 @@ class Warning extends Phaser.Scene {
     this.continue.setInteractive();
     // initialize theme
     this.drone = this.sound.add(`title-drone`);
-
+    this.drone.volume = 0.5;
     // add a tint while hovering
     this.continue.on(`pointerover`, () => {
       this.continue.tint = 0xcccccc;

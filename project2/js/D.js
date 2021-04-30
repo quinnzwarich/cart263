@@ -58,16 +58,23 @@ class D extends Phaser.Scene {
       this.transition(this.line0, `options`);
     }
   }
-  
+
   transition(prevLine, whereTo) {
   	if (!prevLine.text.anims.isPlaying && prevLine.toggle) {
   		this.input.on(`pointerup`, () => {
-        // stop theme
-        this.game.sound.stopAll();
-        // reset the toggles
-        this.line0.toggle = true;
-        this.line1.toggle = false;
-  			this.scene.start(whereTo);
+        if (optionKeys.a && optionKeys.b && optionKeys.c) {
+          // stop theme
+          this.game.sound.stopAll();
+          // reset the toggles
+          this.line0.toggle = true;
+          this.line1.toggle = false;
+    			this.scene.start(whereTo);
+        } else {
+          // reset the toggles
+          this.line0.toggle = true;
+          this.line1.toggle = false;
+    			this.scene.start(whereTo);
+        }
   		});
   	}
   }

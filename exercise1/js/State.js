@@ -2,8 +2,8 @@ class State {
   constructor() {
     this.selectedI = 0;
     this.selectedJ = 0;
-    this.outerRing = 0;
-    this.innerRing = 0;
+    this.outerRing = 0; // fast
+    this.innerRing = 0; // slow
     this.vecPositions = [];
     this.vanPositions = [];
     this.maxPositions = 2;

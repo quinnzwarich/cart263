@@ -54,6 +54,7 @@ function preload() {
 function setup() {
   createCanvas(600, 600, WEBGL);
   userStartAudio();
+
   cam = createCamera();
   currentState = new Title();
 

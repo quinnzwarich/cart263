@@ -82,7 +82,7 @@ function draw() {
 
 function assessRate() {
   // How fast should the slowest lyric be
-  let baseRate = 10000;
+  let baseRate = 25000;
   // Get references to the arrays of the current lyric
   let morrisonLyric = lyricData.verses[morrison.verse][morrison.stanza].morrison.length;
   let reedLyric = lyricData.verses[reed.verse][reed.stanza].reed.length;
@@ -200,7 +200,7 @@ function renderMorrison() {
   // choose the most recent image
   let index = morrison.images.length - 1;
   let img = morrison.images[index]; img.loadPixels();
-  noiseSeed(morrison.index); 
+  noiseSeed(morrison.index);
   for (let j = 0; j < dimJ; j+= 2) {
     for (let i = 0; i < dimI; i+= 2) {
       let index = (j * dimI + i) * 4;
